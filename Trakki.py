@@ -11,7 +11,7 @@ class Expense:
     def __repr__(self):
         return f"{self.id}  | {self.date}  | ${self.amount:>8.2f} | {self.category:12} | {self.description}"
 
-class Krakki:
+class Trakki:
     def __init__(self):
         self.expenses = []
 
@@ -87,10 +87,10 @@ class Krakki:
             except Exception as e:
                 print(f"error: ", e)
 
-             
-Krakki = Krakki()
 
-Krakki.menu()
+Trakki = Trakki()
+
+Trakki.menu()
 
 
 

@@ -160,7 +160,37 @@ class Trakki:
         
     def about_panel(self):
         self.clear()
-        input()
+        w = 62
+
+        print("╔" + "═"*(w - 2) + "╗")
+        print("║" + "ABOUT TRAKKI".center(w - 2)+ "║")
+        print("╠" +  "".center(w - 2, "═") + "╣")
+        print("║" + "".center(w - 2)+ "║")
+        print("║" + " TRAKKI is a specialized CLI financial tool designed to".ljust(w-2) + "║")
+        print("║" + " empower students to take control of their spending.".ljust(w-2) + "║")
+        print("║" + "".center(w - 2)+ "║")
+        print("║" + " CORE CAPABILITIES:".ljust(w-2) + "║")
+        print("║" + " - Track dynamic income (Scholarships, Allowances, Jobs)".ljust(w-2) + "║")
+        print("║" + " - Monitor student-centric expense categories".ljust(w-2) + "║")
+        print("║" + " - Visual progress bars for specific savings targets".ljust(w-2) + "║")
+        print("║" + " - AI-powered Chat Advisor for personalized budgeting".ljust(w-2) + "║")
+        print("║" + "".center(w - 2)+ "║")
+        print("║" + " DEVELOPER: Aldrsze.".ljust(w-2) + "║")
+        print("║" + "".center(w - 2)+ "║")
+        print("╠" +  "".center(w - 2, "═") + "╣")
+        print("║" + "[B] BACK TO HOME".center(w - 2)+ "║")
+        print("╚" + "═"*(w - 2) + "╝")
+        
+        while True:
+            choice = msvcrt.getch().decode('utf-8').lower()
+
+            if choice == 'b':
+                return
+            else:
+                pass
+
+
+
     def dashboard_panel(self):
         self.clear()
         print("dashboard")
@@ -196,11 +226,11 @@ class Trakki:
             self.clear()
             print("═"*w)
             text = """
-      ╔╦╦╦╦╦╗  ╔╦╦╦╦╗   ╔╦╦╦╦╦╗  ║║  ╔═╝  ║║  ╔═╝  ╔╦╦╦╗
-        ║║     ║║  ║║   ║║  ║║   ║║ ║║    ║║ ║║      ║║
-        ║║     ╠╬╬╬╩╗   ╠╬╬╬╬╣   ╠╬╬╩╗    ╠╬╬╩╗      ║║
-        ║║     ║║ ╚╗    ║║  ║║   ║║ ╚╗    ║║ ╚╗      ║║
-        ╩╩     ╩╩  ╩╩   ╩╩  ╩╩   ╩╩  ╩╩   ╩╩  ╩╩   ╩╩╩╩╩
+     ╔╦╦╦╦╦╦╗  ╔╦╦╦╦╗   ╔╦╦╦╦╦   ╔╗ ╔═    ╔╗ ╔═  ╔╦╦╦╦╗
+        ║║     ║║  ║║   ║║  ║║   ║║ ║     ║║ ║     ║║
+        ║║     ╠╬╬╬╬╩   ╠╬╬╬╬╣   ╠╬╬╬     ╠╬╬╬     ║║
+        ║║     ║║  ╚╗   ║║  ║║   ║║ ╚╗    ║║ ╚╗    ║║
+        ╩╩     ╩╩   ╩╩  ╩╩  ╩╩   ╩╩  ╩╩   ╩╩  ╩╩ ╚╩╩╩╩╝
                     """
             print(text.center(w))
             print("- YOUR PERSONAL EXPENSE TRACKER -\n".center(w))

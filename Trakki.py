@@ -45,7 +45,7 @@ class Trakki:
         print("\033[4;1H USERNAME: ".center(w))
         print("\033[5;1H PASSWORD: ".center(w))
         print("="*w)
-        print("[1] START TYPING [2] RETURN [3] SIGNUP".center(w))
+        print("[1] START TYPING [2] SIGNUP [3] RETURN".center(w))
         print("="*w)
 
         choice = input(" > ")
@@ -88,21 +88,21 @@ class Trakki:
                     pass
             self.login_panel()
         elif choice == '2':
-            return
-        elif choice == '3':
             self.signup_panel()
+        elif choice == '3':
+            return
         else:
             self.login_panel()
 
     def signup_panel(self):
+        self.clear()
         w = 62
-        print()
         print("="*w)
         print(" - CREATE ACCOUNT - ".center(w))
         print("="*w)
         print()
-        print("\033[14;1H CREATE USERNAME: ".center(w))
-        print("\033[15;1H CREATE PASSWORD: ".center(w))
+        print("\033[4;1H CREATE USERNAME: ".center(w))
+        print("\033[5;1H CREATE PASSWORD: ".center(w))
         print("="*w)
         print("[1] START TYPING [2] RETURN".center(w))
         print("="*w)
@@ -110,13 +110,13 @@ class Trakki:
         choice = input(" > ")
 
         if choice == '1':
-            print("\033[17;1H\033[K", end="")
+            print("\033[7;1H\033[K", end="")
             print("INPUT DETAILS".center(w))
             
-            username = input("\033[14;19H")
-            password = getpass.getpass("\033[15;19H", echo_char='*')
+            username = input("\033[4;19H")
+            password = getpass.getpass("\033[5;19H", echo_char='*')
 
-            print("\033[17;1H\033[K", end="")
+            print("\033[7;1H\033[K", end="")
             print("[ENTER] TO SAVE [R] TO RESET".center(w))
 
             while True:
@@ -129,7 +129,7 @@ class Trakki:
                             user_exist = True
                             break
                     if user_exist:
-                        print("\033[17;1H\033[K", end="")
+                        print("\033[7;1H\033[K", end="")
                         print("USERNAME ALREADY EXIST".center(w))
                         input("\n >  [ENTER] TO CONTINUE")
                         self.signup_panel()
@@ -137,7 +137,7 @@ class Trakki:
                     else:
                         new_user = User(username, password)
                         self.users.append(new_user)
-                        print("\033[17;1H\033[K", end="")
+                        print("\033[7;1H\033[K", end="")
                         print("ACCOUNT CREATED SUCCESSFULLY! ".center(w))
                         input("\n >  [ENTER] TO CONTINUE")
                         return
@@ -153,28 +153,29 @@ class Trakki:
             self.signup_panel()
         
     def about_panel(self):
-        self.clear()
-        w = 62
-
-        print("="*(w - 2))
-        print("ABOUT TRAKKI".center(w - 2))
-        print("".center(w - 2, "="))
-        print("".center(w - 2))
-        print(" TRAKKI is a specialized CLI financial tool designed to".ljust(w-2))
-        print(" empower students to take control of their spending.".ljust(w-2))
-        print("".center(w - 2))
-        print(" CORE CAPABILITIES:".ljust(w-2))
-        print(" - Track dynamic income (Scholarships, Allowances, Jobs)".ljust(w-2))
-        print(" - Monitor student-centric expense categories".ljust(w-2))
-        print(" - AI-powered Chat Advisor for personalized budgeting".ljust(w-2))
-        print("".center(w - 2))
-        print(" DEVELOPER: Aldrsze.".ljust(w-2))
-        print("".center(w - 2))
-        print("".center(w - 2, "="))
-        print("[B] BACK TO HOME".center(w - 2))
-        print("="*(w - 2))
-        
         while True:
+
+            self.clear()
+            w = 62
+
+            print("="*w)
+            print("ABOUT TRAKKI".center(w))
+            print("="*w)
+            print()
+            print(" TRAKKI is a specialized CLI financial tool designed to".ljust(w))
+            print(" empower students to take control of their spending.".ljust(w))
+            print()
+            print(" CORE CAPABILITIES:".ljust(w))
+            print(" - Track dynamic income (Scholarships, Allowances, Jobs)".ljust(w))
+            print(" - Monitor student-centric expense categories".ljust(w))
+            print(" - AI-powered Chat Advisor for personalized budgeting".ljust(w))
+            print()
+            print(" DEVELOPER: Aldrsze.".ljust(w))
+            print()
+            print("="*w)
+            print("[B] BACK TO HOME".center(w))
+            print("="*w)
+            
             choice = input(" > ").lower()
 
             if choice == 'b':
@@ -186,21 +187,21 @@ class Trakki:
         self.clear()
         w = 62
 
-        print("="*(w - 2))
+        print("="*w)
         print(f"TRAKKI DASHBOARD | Welcome, [{self.current_user}]".center(w - 2))
-        print("".center(w - 2, "="))
-        print("".center(w - 2))
-        print(f"   CURRENT BALANCE: ₱ {self.balance}".ljust(w-2))
-        print("".center(w - 2))
-        print(f"   || INCOME (MONTHLY): {self.income}".ljust(w-2))
-        print(f"   || EXPENSES (MONTHLY): {self.monthly_expenses}".ljust(w-2))
-        print(f"   || SAVINGS RATE : {self.savings_rate}".ljust(w-2))
-        print(f"   || TOTAL TARGETS : {self.total_targets}".ljust(w-2))
-        print("".center(w - 2))
-        print("".center(w - 2, "═"))
-        print(" [1] INCOME    [2] EXPENSES  [3] TARGETS".center(w - 2))
-        print(" [4] HISTORY   [5] CHAT      [0] LOGOUT".center(w - 2))
-        print("="*(w - 2))
+        print("="*w)
+        print()
+        print(f"   CURRENT BALANCE: ₱ {self.balance}".ljust(w))
+        print()
+        print(f"   || INCOME (MONTHLY): {self.income}".ljust(w))
+        print(f"   || EXPENSES (MONTHLY): {self.monthly_expenses}".ljust(w))
+        print(f"   || SAVINGS RATE : {self.savings_rate}".ljust(w))
+        print(f"   || TOTAL TARGETS : {self.total_targets}".ljust(w))
+        print()
+        print("="*w)
+        print(" [1] INCOME    [2] EXPENSES  [3] TARGETS".center(w))
+        print(" [4] HISTORY   [5] CHAT      [0] LOGOUT".center(w))
+        print("="*(w))
 
         while True:
             choice = input(" > ")
@@ -221,8 +222,81 @@ class Trakki:
                 pass
     
     def income_panel(self):
-        self.clear()
-        print("=")
+        while True:
+            self.clear()
+            w = 62
+            print("="*w)
+            print(f"TRAKKI INCOME PANEL".center(w))
+            print("="*w)
+            print()
+            print(f"- ALL INCOME TRANSACTION - (1 / 4)".center(w))
+            print()
+            print(f"| ID: {self.balance} ".ljust(w//2),          f"| ID: {self.balance}".ljust(w//2 - 3), "|".ljust(w//2))
+            print(f"| AMOUNT: {self.balance} ".ljust(w//2),      f"| AMOUNT: {self.balance}".ljust(w//2 - 3), "|".ljust(w//2))
+            print(f"| CATEGORY: {self.balance} ".ljust(w//2),    f"| CATEGORY: {self.balance}".ljust(w // 2 - 3), "|".ljust(w//2))
+            print(f"| DESCRIPTION: {self.balance} ".ljust(w//2), f"| DESCRIPTION: {self.balance}".ljust(w // 2 - 3), "|".ljust(w//2))
+            print(f"| DATE/TIME: {self.balance} ".ljust(w//2),   f"| DATE/TIME: {self.balance}".ljust(w // 2 - 3), "|\n".ljust(w//2))
+            print("-"*w)
+            print()
+            print(f"| ID: {self.balance} ".ljust(w//2),          f"| ID: {self.balance}".ljust(w//2 - 3), "|".ljust(w//2))
+            print(f"| AMOUNT: {self.balance} ".ljust(w//2),      f"| AMOUNT: {self.balance}".ljust(w//2 - 3), "|".ljust(w//2))
+            print(f"| CATEGORY: {self.balance} ".ljust(w//2),    f"| CATEGORY: {self.balance}".ljust(w // 2 - 3), "|".ljust(w//2))
+            print(f"| DESCRIPTION: {self.balance} ".ljust(w//2), f"| DESCRIPTION: {self.balance}".ljust(w // 2 - 3), "|".ljust(w//2))
+            print(f"| DATE/TIME: {self.balance} ".ljust(w//2),   f"| DATE/TIME: {self.balance}".ljust(w // 2 - 3), "|\n".ljust(w//2))
+            print("="*w)
+            print("- EDIT INCOME -".center(w))
+            print("="*w)
+            print()
+            print(" ID                                    : ")
+            print(" AMOUNT                                : ")
+            print(" CATEOGORY                             :")
+            print(" DESCRIPTION                           :")
+            print(" DATE/TIME (LEAVE BLANK FOR AUTOMATIC) :\n")
+            print("="*w)
+            print(" [1] ADD  [2] EDIT  [J] NEXT  [K] PREVIOUS  [D] DASHBOARD".center(w))
+            print("="*(w))
+
+            choice = input(" > ").lower()
+
+            if choice == '1':
+                self.add_income()
+            elif choice == '2':
+                self.edit_income()
+            elif choice == 'j':
+                pass
+            elif choice == 'k':
+                pass
+            elif choice == 'd':
+                self.dashboard_panel()
+            else:
+                pass
+
+    def add_income(self):
+        while True:
+            self.clear()
+            w = 62
+
+            print("="*w)
+            print("- ADD INCOME -".center(w))
+            print("="*w)
+            print()
+            print(" AMOUNT                                : ")
+            print(" CATEGORY                              :")
+            print(" DESCRIPTION                           :")
+            print(" DATE/TIME (LEAVE BLANK FOR AUTOMATIC) :\n")
+            print("="*w)
+            print("[1] START TYPING  [2] RETURN".center(w))
+            print("="*w)
+
+            choice = input(" > ")
+
+            if choice == '1':
+                pass
+            elif choice == '2':
+                return
+            else:
+                pass
+
 
 
     def expenses_panel(self):
@@ -290,6 +364,6 @@ if __name__ == "__main__":
     user = User('admin', 'asd')
     Trakki.users.append(user)
     Trakki.clear()
-    Trakki.home_panel()
+    Trakki.income_panel()
 
 

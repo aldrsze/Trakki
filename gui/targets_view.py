@@ -140,7 +140,18 @@ def view_targets(root, content_box, logic):
         lambda e: canvas.itemconfig(canvas_window, width=e.width)
     )
 
-    def create_target_card(parent, row, col, name, cost_str, saved_str, needed_str, progress_val, date):
+    def handle_card_action(action, target_id):
+        if action == "remove":
+            response  = tk.messagebox.askyesno("Delete", "Are you sure you want to delete?")
+            if response:
+                logic.remove_target(target_id)  # Call the logic to remove income
+                refresh_cards()  # Refresh the cards to reflect changes
+        elif action == "edit":
+            # Logic for editing income can be added here
+            print(f"Edit action triggered for target ID: {target_id}")
+
+
+    def create_target_card(parent, row, col, target_id, name, cost_str, saved_str, needed_str, progress_val, date):
 
         # card
         card = tk.Frame(parent, bg=COLOR_CARD_BG, highlightbackground=COLOR_BORDER)
@@ -168,7 +179,8 @@ def view_targets(root, content_box, logic):
             font=("Calibri", 10),
             fg="red",
             bg=COLOR_CARD_BG,
-            bd=0, cursor="hand2"
+            bd=0, cursor="hand2",
+            command=lambda: handle_card_action("remove", target_id)
         )
         remove_button.pack(side="right")
 
@@ -179,7 +191,8 @@ def view_targets(root, content_box, logic):
             font=("Calibri", 10),
             fg="#64748B",
             bg=COLOR_CARD_BG,
-            bd=0, cursor="hand2"
+            bd=0, cursor="hand2",
+            command=lambda: handle_card_action("edit", target_id)
         )
         edit_button.pack(side="right", padx=5)
 
@@ -266,6 +279,7 @@ def view_targets(root, content_box, logic):
                 parent=target_grid,
                 row=target_row,
                 col=target_column,
+                target_id=target_item.get_target_id(),
                 name=target_item.get_name(),
                 cost_str=target_item.get_cost(),
                 saved_str=target_item.get_saved(),

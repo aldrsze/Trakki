@@ -126,7 +126,7 @@ def refresh_dashboard(logic):
     categories = ['Income', 'Expenses', 'Target Savings']
     
     # amounts list (with logic data)
-    amounts = [logic.total_income(), logic.total_expenses(), 2250]
+    amounts = [logic.total_income(), logic.total_expenses(), logic.total_savings()]
 
     # bar colors
     bar_colors = [COLOR_SIDEBAR_ACTIVE, "#EF4444", "#10B981"]
@@ -143,7 +143,8 @@ def refresh_dashboard(logic):
 
     for bar in bars:
         y_value = bar.get_height()
-        bars_pos.text(bar.get_x() + bar.get_width()/2, y_value + 100, f'₱{y_value:,.0f}', ha='center', va='bottom', color=COLOR_SIDEBAR, fontweight='bold')
+        if y_value > 0:  # Only show label if there's a value
+            bars_pos.text(bar.get_x() + bar.get_width()/2, y_value + 100, f'₱{y_value:,.0f}', ha='center', va='bottom', color=COLOR_SIDEBAR, fontweight='bold')
 
     canvas = FigureCanvasTkAgg(chart_area, master=chart_frame)
     canvas.draw()

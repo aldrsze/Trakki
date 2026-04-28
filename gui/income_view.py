@@ -47,7 +47,6 @@ def view_income(root, content_box, logic):
         font=("Calibri", 18, "bold")
     )
     amount_label.pack(anchor="w", padx=20)
-
     amount_input = tk.Entry(left_frame, **input_style)
     amount_input.pack(fill="x", padx=20, pady=(0, 15), ipady=2)
 
@@ -59,7 +58,6 @@ def view_income(root, content_box, logic):
         font=("Calibri", 18, "bold")
     )
     category_label.pack(anchor="w", padx=20)
-
     category_input = tk.Entry(left_frame, **input_style)
     category_input.pack(fill="x", padx=20, pady=(0, 15), ipady=2)
 
@@ -71,7 +69,6 @@ def view_income(root, content_box, logic):
         font=("Calibri", 18, "bold")
     )
     description_label.pack(anchor="w", padx=20)
-
     description_input = tk.Text(left_frame, height=6, wrap="word", **input_style)
     description_input.pack(fill="x", padx=20, pady=(0, 25))
 
@@ -103,10 +100,7 @@ def view_income(root, content_box, logic):
     submit_button.pack(fill="x", padx=20)
 
     # right frame
-    right_frame = tk.Frame(
-        split_container,
-        bg=COLOR_CONTENT_BG
-    )
+    right_frame = tk.Frame(split_container, bg=COLOR_CONTENT_BG)
     right_frame.grid(
         row=0,
         column=1,
@@ -130,10 +124,7 @@ def view_income(root, content_box, logic):
     )
 
     # Frame for the cards in the canvas
-    income_grid = tk.Frame(
-        canvas,
-        bg=COLOR_CONTENT_BG
-    )
+    income_grid = tk.Frame(canvas, bg=COLOR_CONTENT_BG)
 
     # determines how long the list for the scrolling
     income_grid.bind(
@@ -150,7 +141,6 @@ def view_income(root, content_box, logic):
 
     # link scrollbar and canvas
     canvas.configure(yscrollcommand=scrollbar.set)
-
     scrollbar.pack(side="right", fill="y")
     canvas.pack(side="left", fill="both", expand=True)
 
@@ -159,8 +149,17 @@ def view_income(root, content_box, logic):
         lambda e: canvas.itemconfig(canvas_window, width=e.width)
     )
 
-    def create_income_card(parent, row, col, amount, category, desc, date):
+    def handle_card_action(action, income_id):
+        if action == "remove":
+            response  = tk.messagebox.askyesno("Delete", "Are you sure you want to delete?")
+            if response:
+                logic.remove_income(income_id)  # Call the logic to remove income
+                refresh_cards()  # Refresh the cards to reflect changes
+        elif action == "edit":
+            # Logic for editing income can be added here
+            print(f"Edit action triggered for income ID: {income_id}")
 
+    def create_income_card(parent, row, col, income_id, amount, category, desc, date):
         # card
         card = tk.Frame(parent, bg=COLOR_CARD_BG, highlightbackground=COLOR_BORDER)
         card.grid(row=row, column=col, padx=10, pady=10, sticky="nsew")
@@ -188,7 +187,8 @@ def view_income(root, content_box, logic):
             fg="#EF4444",
             bg=COLOR_CARD_BG,
             bd=0,
-            cursor="hand2"
+            cursor="hand2",
+            command=lambda: handle_card_action("remove", income_id)
         )
         t_button.pack(side="right")
 
@@ -200,7 +200,8 @@ def view_income(root, content_box, logic):
             fg="#64748B",
             bg=COLOR_CARD_BG,
             bd=0,
-            cursor="hand2"
+            cursor="hand2",
+            command=lambda: handle_card_action("edit", income_id)
         )
         e_button.pack(side="right", padx=5)
 
@@ -258,6 +259,7 @@ def view_income(root, content_box, logic):
                 parent=income_grid,
                 row=target_row,
                 col=target_column,
+                income_id=income_item.get_income_id(),  # use the id from the income object
                 amount=income_item.get_amount(),
                 category=income_item.get_category(),
                 desc=income_item.get_desc(),

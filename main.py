@@ -31,7 +31,8 @@ for target in app_logic.get_targets():
 # root window
 root = tk.Tk()
 root.title("Trakki")
-root.geometry("1300x800") # dimensions
+root.geometry("1200x700") # dimensions
+root.state('zoomed')
 root.resizable(False, False) # non-resizable
 root.configure(bg=COLOR_MAIN_BG)
 

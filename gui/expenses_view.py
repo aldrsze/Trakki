@@ -160,7 +160,17 @@ def view_expenses(root, content_box, logic):
         lambda e: canvas.itemconfig(canvas_window, width=e.width)
     )
 
-    def create_expense_card(parent, row, col, amount, category, desc, date):
+    def handle_card_action(action, expense_id):
+        if action == "remove":
+            response  = tk.messagebox.askyesno("Delete", "Are you sure you want to delete?")
+            if response:
+                logic.remove_expense(expense_id)  # Call the logic to remove income
+                refresh_cards()  # Refresh the cards to reflect changes
+        elif action == "edit":
+            # Logic for editing income can be added here
+            print(f"Edit action triggered for expense ID: {expense_id}")
+
+    def create_expense_card(parent, row, col, expense_id, amount, category, desc, date):
 
         # card
         card = tk.Frame(parent, bg=COLOR_CARD_BG, highlightbackground=COLOR_BORDER)
@@ -181,7 +191,7 @@ def view_expenses(root, content_box, logic):
         )
         c_label.pack(side="left")
 
-        # Trash button icon
+        # remove button 
         t_button = tk.Button(
             top_row,
             text="Remove",
@@ -189,11 +199,12 @@ def view_expenses(root, content_box, logic):
             fg="#EF4444",
             bg=COLOR_CARD_BG,
             bd=0,
-            cursor="hand2"
+            cursor="hand2",
+            command=lambda: handle_card_action("remove", expense_id)
         )
         t_button.pack(side="right")
 
-        # Edit button icon
+        # Edit button 
         e_button = tk.Button(
             top_row,
             text="Edit",
@@ -201,7 +212,8 @@ def view_expenses(root, content_box, logic):
             fg="#64748B",
             bg=COLOR_CARD_BG,
             bd=0,
-            cursor="hand2"
+            cursor="hand2",
+            command=lambda: handle_card_action("remove", expense_id)
         )
         e_button.pack(side="right", padx=5)
 
@@ -259,6 +271,7 @@ def view_expenses(root, content_box, logic):
                 parent=expense_grid,
                 row=target_row,
                 col=target_column,
+                expense_id=expense_item.get_expense_id(),  # use the id from the expense object
                 amount=expense_item.get_amount(),
                 category=expense_item.get_category(),
                 desc=expense_item.get_desc(),

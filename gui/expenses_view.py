@@ -28,14 +28,14 @@ def view_expenses(root, content_box, logic):
         "highlightcolor": COLOR_SIDEBAR_ACTIVE,
         "relief": "flat", # visual style of the border
         "bd": 1,
-        "font": ("Calibri", 16)
+        "font": ("Calibri", 14)
     }
 
     # page title
     page_title = tk.Label(
         left_frame,
         text="Add New Expense",
-        font=("Calibri", 20, "bold"),
+        font=("Calibri", 18, "bold"),
         bg = COLOR_CONTENT_BG
     )
     page_title.pack(pady=20, anchor="w", padx=20)
@@ -45,7 +45,7 @@ def view_expenses(root, content_box, logic):
         left_frame,
         text="Amount:",
         bg=COLOR_CONTENT_BG,
-        font=("Calibri", 18, "bold")
+        font=("Calibri", 14, "bold")
     )
     amount_label.pack(anchor="w", padx=20)
 
@@ -57,7 +57,7 @@ def view_expenses(root, content_box, logic):
         left_frame,
         text="Category:",
         bg=COLOR_CONTENT_BG,
-        font=("Calibri", 18, "bold")
+        font=("Calibri", 14, "bold")
     )
     category_label.pack(anchor="w", padx=20)
 
@@ -69,7 +69,7 @@ def view_expenses(root, content_box, logic):
         left_frame,
         text="Description:",
         bg=COLOR_CONTENT_BG,
-        font=("Calibri", 18, "bold")
+        font=("Calibri", 14, "bold")
     )
     description_label.pack(anchor="w", padx=20)
 
@@ -94,7 +94,7 @@ def view_expenses(root, content_box, logic):
         left_frame,
         text="Add Expense",
         bg=COLOR_SIDEBAR,
-        font=("Calibri", 18, "bold"),
+        font=("Calibri", 14, "bold"),
         fg="white",
         bd=0,
         padx=15,
@@ -213,7 +213,7 @@ def view_expenses(root, content_box, logic):
             bg=COLOR_CARD_BG,
             bd=0,
             cursor="hand2",
-            command=lambda: handle_card_action("remove", expense_id)
+            command=lambda: handle_card_action("edit", expense_id)
         )
         e_button.pack(side="right", padx=5)
 

@@ -27,14 +27,14 @@ def view_income(root, content_box, logic):
         "highlightcolor": COLOR_SIDEBAR_ACTIVE,
         "relief": "flat", # visual style of the border
         "bd": 1,
-        "font": ("Calibri", 16)
+        "font": ("Calibri", 14)
     }
 
     # page title
     page_title = tk.Label(
         left_frame,
         text="Add New Income",
-        font=("Calibri", 20, "bold"),
+        font=("Calibri", 18, "bold"),
         bg = COLOR_CONTENT_BG
     )
     page_title.pack(pady=20, anchor="w", padx=20)
@@ -44,7 +44,7 @@ def view_income(root, content_box, logic):
         left_frame,
         text="Amount:",
         bg=COLOR_CONTENT_BG,
-        font=("Calibri", 18, "bold")
+        font=("Calibri", 14, "bold")
     )
     amount_label.pack(anchor="w", padx=20)
     amount_input = tk.Entry(left_frame, **input_style)
@@ -55,7 +55,7 @@ def view_income(root, content_box, logic):
         left_frame,
         text="Category:",
         bg=COLOR_CONTENT_BG,
-        font=("Calibri", 18, "bold")
+        font=("Calibri", 14, "bold")
     )
     category_label.pack(anchor="w", padx=20)
     category_input = tk.Entry(left_frame, **input_style)
@@ -66,7 +66,7 @@ def view_income(root, content_box, logic):
         left_frame,
         text="Description:",
         bg=COLOR_CONTENT_BG,
-        font=("Calibri", 18, "bold")
+        font=("Calibri", 14, "bold")
     )
     description_label.pack(anchor="w", padx=20)
     description_input = tk.Text(left_frame, height=6, wrap="word", **input_style)
@@ -90,7 +90,7 @@ def view_income(root, content_box, logic):
         left_frame,
         text="Add Income",
         bg=COLOR_SIDEBAR,
-        font=("Calibri", 18, "bold"),
+        font=("Calibri", 14, "bold"),
         fg="white",
         bd=0,
         padx=15,

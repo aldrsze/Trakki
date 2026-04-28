@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from colors import *
 
-def view_targets(root, content_box, logic):
+def view_savings(root, content_box, logic):
     # container
     split_container = tk.Frame(content_box, bg=COLOR_CONTENT_BG)
     split_container.pack(fill="both", expand=True, padx=10, pady=10)
@@ -26,14 +26,14 @@ def view_targets(root, content_box, logic):
         "highlightcolor": COLOR_SIDEBAR_ACTIVE,
         "relief": "flat", # visual style of the border
         "bd": 1,
-        "font": ("Calibri", 16)
+        "font": ("Calibri", 14)
     }
 
     # page title
     page_title = tk.Label(
         left_frame, 
-        text="Add Target Item",
-        font=("Calibri", 20, "bold"),
+        text="Add Target Savings",
+        font=("Calibri", 18, "bold"),
         bg=COLOR_CONTENT_BG
     )
     page_title.pack(pady=(20, 20),anchor="w", padx=20)
@@ -43,7 +43,7 @@ def view_targets(root, content_box, logic):
         left_frame,
         text="Item Name:",
         bg=COLOR_CONTENT_BG,
-        font=("Calibri", 18, "bold")
+        font=("Calibri", 14, "bold")
     )
     item_label.pack(anchor="w", padx=20)
 
@@ -55,7 +55,7 @@ def view_targets(root, content_box, logic):
         left_frame,
         text="Cost (₱):",
         bg=COLOR_CONTENT_BG,
-        font=("Calibri", 18, "bold")
+        font=("Calibri", 14, "bold")
     )
     cost_label.pack(anchor="w", padx=20)
 
@@ -67,7 +67,7 @@ def view_targets(root, content_box, logic):
         left_frame,
         text="Target Date (MM/DD/YYYY):",
         bg=COLOR_CONTENT_BG,
-        font=("Calibri", 18, "bold")
+        font=("Calibri", 14, "bold")
     )
     target_label.pack(anchor="w", padx=20)
 
@@ -92,7 +92,7 @@ def view_targets(root, content_box, logic):
         left_frame,
         text="Add Target",
         bg=COLOR_SIDEBAR,
-        font=("Calibri", 18, "bold"),
+        font=("Calibri", 14, "bold"),
         fg="white",
         bd=0,
         padx=15,
@@ -258,20 +258,20 @@ def view_targets(root, content_box, logic):
         goal_label.pack(anchor="w", padx=10, pady=(5, 15))
 
     def refresh_cards():
-        # Clear all existing targets cards 
+        # Clear all existing savings cards 
         for existing_card_widget in target_grid.winfo_children():
             existing_card_widget.destroy()
 
-        # get all the targets data 
-        current_targets_list = logic.get_targets()
+        # get all the savings data 
+        current_savings_list = logic.get_savings()
 
         # Create and display a new card for each income
-        for targets_index in range(len(current_targets_list)):
-            # get the actual targets item from list using its current index.
-            target_item = current_targets_list[targets_index]
+        for savings_index in range(len(current_savings_list)):
+            # get the actual savings item from list using its current index.
+            target_savings = current_savings_list[savings_index]
 
             # 1 card per row
-            target_row = targets_index 
+            target_row = savings_index 
             target_column = 0
 
             # call a separate function to visually create one income card.
@@ -279,13 +279,13 @@ def view_targets(root, content_box, logic):
                 parent=target_grid,
                 row=target_row,
                 col=target_column,
-                target_id=target_item.get_target_id(),
-                name=target_item.get_name(),
-                cost_str=target_item.get_cost(),
-                saved_str=target_item.get_saved(),
-                needed_str=target_item.get_needed(),
-                progress_val=target_item.get_progress(),
-                date=target_item.get_date()
+                target_id=target_savings.get_target_id(),
+                name=target_savings.get_name(),
+                cost_str=target_savings.get_cost(),
+                saved_str=target_savings.get_saved(),
+                needed_str=target_savings.get_needed(),
+                progress_val=target_savings.get_progress(),
+                date=target_savings.get_date()
             )
     refresh_cards()
 

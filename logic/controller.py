@@ -5,7 +5,7 @@ class TrakkiLogic:
         # Encapsulation
         self.__expenses = []
         self.__incomes = []
-        self.__targets = []
+        self.__savings = []
         self.__next_income_id = 1
         self.__next_expense_id = 1
         self.__next_target_id = 1
@@ -36,8 +36,8 @@ class TrakkiLogic:
     def get_incomes(self): 
         return self.__incomes
     
-    def get_targets(self): 
-        return self.__targets
+    def get_savings(self): 
+        return self.__savings
 
     # Instance Methods to ADD new data using the Models
     def add_expense(self, amount, category, desc):
@@ -52,7 +52,7 @@ class TrakkiLogic:
 
     def add_target(self, name, cost, date, saved=0.0):
         new_target = Target(self.__next_target_id, name, cost, date, saved)
-        self.__targets.append(new_target)
+        self.__savings.append(new_target)
         self.__next_target_id += 1 # increase per add
 
     def total_income(self):
@@ -83,7 +83,7 @@ class TrakkiLogic:
 
     def total_saved(self):
         total = 0
-        for target in self.get_targets():
+        for target in self.get_savings():
             amount = target.get_saved()
             total += float(str(amount))
         
@@ -105,7 +105,7 @@ class TrakkiLogic:
 
     def remove_target(self, target_id):
         # remove target by id
-        for target in range(len(self.__targets)):
-            if self.__targets[target].get_target_id() == target_id:
-                self.__targets.pop(target)
+        for target in range(len(self.__savings)):
+            if self.__savings[target].get_target_id() == target_id:
+                self.__savings.pop(target)
                 break  # Stop after finding and removing the first match

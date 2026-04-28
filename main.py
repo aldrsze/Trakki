@@ -4,7 +4,7 @@ from colors import *
 
 from gui import income_view
 from gui import expenses_view
-from gui import targets_view
+from gui import savings_view
 from gui import dashboard_view
 from gui import table_view
 from gui import ai_chat_view
@@ -16,7 +16,7 @@ app_logic = TrakkiLogic()
 # Show all data in terminal for dashboard calculations
 print("All Incomes:", app_logic.get_incomes())
 print("All Expenses:", app_logic.get_expenses())
-print("All Targets:", app_logic.get_targets())
+print("All savings:", app_logic.get_savings())
 
 # For each income, expense, and target, print details
 for income in app_logic.get_incomes():
@@ -25,7 +25,7 @@ for income in app_logic.get_incomes():
 for expense in app_logic.get_expenses():
     print("Expense:", expense.get_amount(), expense.get_category(), expense.get_desc())
 
-for target in app_logic.get_targets():
+for target in app_logic.get_savings():
     print("Target:", target.get_name(), target.get_cost(), target.get_date(), target.get_saved(), target)
 
 # root window
@@ -95,7 +95,7 @@ nav_items = [
     ("Dashboard", dashboard_view.view_dashboard),
     ("Income", income_view.view_income),
     ("Expenses", expenses_view.view_expenses),
-    ("Targets", targets_view.view_targets),
+    ("Savings", savings_view.view_savings),
     ("Table View", table_view.view_table ), 
     ("AI Chat",  ai_chat_view.view_ai_chat) 
 ]
@@ -110,7 +110,7 @@ for item_name, builder_func in nav_items:
     # title label
     title_label = tk.Label(
         page_frame,
-        text= f"- {item_name.upper()} -",
+        text= item_name.upper(),
         font="Calibri 24 bold",
         bg=COLOR_MAIN_BG,
         fg="black"
@@ -158,7 +158,7 @@ logo_img = ImageTk.PhotoImage(resized_logo)
 # put the image in a label
 logo_label = tk.Label(sidebar, image=logo_img, bg=COLOR_SIDEBAR)
 logo_label.image = logo_img 
-logo_label.pack(pady=(80, 20))
+logo_label.pack(pady=(20, 20))
 
 # dev name
 dev_name = tk.Label(

@@ -112,7 +112,7 @@ def refresh_dashboard(logic):
         value_label.pack(expand=True, side="top", pady=(10, 0))
 
     # static UI Cards
-    create_container_card(cards_frame, 0, "Current Balance", "₱1,750.00", COLOR_SIDEBAR_ACTIVE)
+    create_container_card(cards_frame, 0, "Current Balance", f"₱{logic.current_balance():,.2f}", COLOR_SIDEBAR_ACTIVE)
     create_container_card(cards_frame, 1, "Total Income", f"₱{logic.total_income():,.2f}", "green")
     create_container_card(cards_frame, 2, "Total Expenses", f"₱{logic.total_expenses():,.2f}", "#EF4444")
     create_container_card(cards_frame, 3, "Total Saved", f"₱{logic.total_saved():,.2f}", "black")

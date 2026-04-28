@@ -50,7 +50,7 @@ class TrakkiLogic:
         self.__incomes.append(new_income)
         self.__next_income_id += 1 # increase it per add
 
-    def add_target(self, name, cost, date, saved=0.00):
+    def add_target(self, name, cost, date, saved=0.0):
         new_target = Target(self.__next_target_id, name, cost, date, saved)
         self.__targets.append(new_target)
         self.__next_target_id += 1 # increase per add
@@ -62,7 +62,7 @@ class TrakkiLogic:
             total += float(str(amount))
 
         return total
-
+    
     def total_expenses(self):
         total = 0
         for expense in self.get_expenses():
@@ -71,6 +71,16 @@ class TrakkiLogic:
 
         return total
     
+    def current_balance(self):
+        income_total = 0
+        expense_total = 0
+        balance = 0
+        income_total = self.total_income()
+        expense_total = self.total_expenses()
+
+        balance = income_total - expense_total
+        return balance
+
     def total_saved(self):
         total = 0
         for target in self.get_targets():

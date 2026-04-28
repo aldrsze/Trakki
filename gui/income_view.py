@@ -76,13 +76,13 @@ def view_income(root, content_box, logic):
     description_input.pack(fill="x", padx=20, pady=(0, 25))
 
     def handle_submit():
-        amt = amount_input.get()
-        cat = category_input.get()
+        amount = amount_input.get()
+        category = category_input.get()
         desc = description_input.get("1.0", "end-1c")
 
-        if amt and cat:
-            logic.add_income(amt, cat, desc) # Send to OOP controller
-            refresh_cards()                   # Redraw the screen
+        if amount and category:
+            logic.add_income(amount, category, desc) # Send to OOP controller
+            refresh_cards() # Redraw the screen
             
             # Clear input boxes
             amount_input.delete(0, tk.END)
@@ -207,7 +207,7 @@ def view_income(root, content_box, logic):
         # Card Details
         amount_details = tk.Label(
             card,
-            text=amount,
+            text=f"₱{float(str(amount)):,.2f}",
             font=("Calibri", 20, "bold"),
             fg="black",
             bg=COLOR_CARD_BG
@@ -217,7 +217,7 @@ def view_income(root, content_box, logic):
         desc_details = tk.Label(
             card,
             text=desc,
-            font=("Calibri", 20),
+            font=("Calibri", 12),
             fg="#333333",
             bg=COLOR_CARD_BG,
             justify="left",

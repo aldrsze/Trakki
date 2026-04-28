@@ -13,6 +13,21 @@ from logic.controller import TrakkiLogic
 
 app_logic = TrakkiLogic()
 
+# Show all data in terminal for dashboard calculations
+print("All Incomes:", app_logic.get_incomes())
+print("All Expenses:", app_logic.get_expenses())
+print("All Targets:", app_logic.get_targets())
+
+# For each income, expense, and target, print details
+for income in app_logic.get_incomes():
+    print("Income:", income.get_amount(), income.get_category(), income.get_desc())
+
+for expense in app_logic.get_expenses():
+    print("Expense:", expense.get_amount(), expense.get_category(), expense.get_desc())
+
+for target in app_logic.get_targets():
+    print("Target:", target.get_name(), target.get_cost(), target.get_date(), target.get_saved(), target)
+
 # root window
 root = tk.Tk()
 root.title("Trakki")
@@ -67,6 +82,9 @@ def show_page(page_name):
             nav_buttons[name].configure(bg=COLOR_SIDEBAR_ACTIVE) # Changes the color if active
         else:
             nav_buttons[name].configure(bg=COLOR_SIDEBAR)
+            
+    if page_name == "Dashboard":
+        dashboard_view.refresh_dashboard(app_logic)
 
     # Bring the selected page's frame to the front
     page_to_open = pages[page_name]
@@ -77,8 +95,8 @@ nav_items = [
     ("Income", income_view.view_income),
     ("Expenses", expenses_view.view_expenses),
     ("Targets", targets_view.view_targets),
-    ("Table View", table_view.view_table ), # No builder yet for Table View
-    ("AI Chat",  ai_chat_view.view_ai_chat)     # No builder yet for AI Chat
+    ("Table View", table_view.view_table ), 
+    ("AI Chat",  ai_chat_view.view_ai_chat) 
 ]
 
 # Create all pages and their contents at startup

@@ -77,12 +77,12 @@ def view_expenses(root, content_box, logic):
     description_input.pack(fill="x", padx=20, pady=(0, 25))
 
     def handle_submit():
-        amt = amount_input.get()
-        cat = category_input.get()
+        amount = amount_input.get()
+        category = category_input.get()
         desc = description_input.get("1.0", "end-1c")
 
-        if amt and cat:
-            logic.add_expense(amt, cat, desc) # Send to OOP controller
+        if amount and category:
+            logic.add_expense(amount, category, desc) # Send to OOP controller
             refresh_cards()                   # Redraw the screen
             
             # Clear input boxes

@@ -34,12 +34,10 @@ class Income:
         return self.__date
 
 class Target:
-    def __init__(self, name, cost, date, saved="₱0.00", progress=0):
+    def __init__(self, name, cost, date, saved=0.00):
         self.__name = name
-        self.__cost = cost
-        self.__saved = saved
-        self.__needed = cost
-        self.__progress = progress
+        self.__cost = float(cost)
+        self.__saved = float(saved)
         self.__date = date
 
     def get_name(self): 
@@ -52,10 +50,13 @@ class Target:
         return self.__saved
 
     def get_needed(self):
-        return self.__needed
+        needed = self.__cost - self.__saved
+        return max(0, needed) # to not show negative
 
     def get_progress(self):
-        return self.__progress
+        if self.__cost == 0: return 0
+        progress = (self.__saved / self.__cost) * 100
+        return min(100, progress) # Caps at 100%
 
     def get_date(self):
         return self.__date

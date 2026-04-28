@@ -6,7 +6,7 @@ class TrakkiLogic:
         self.__expenses = []
         self.__incomes = []
         self.__targets = [
-             Target("New Laptop", 1200.00, "Dec 25, 2026", saved="₱850.00", progress=70.8)
+             Target("New Laptop", 1200.00, "Dec 25, 2026", 750.00)
         ]
 
     # Instance Methods to retrieve the encapsulated lists
@@ -30,7 +30,7 @@ class TrakkiLogic:
         self.__incomes.append(new_income)
 
     def add_target(self, name, cost, date):
-        new_target = Target(name, f"₱{cost}", date)
+        new_target = Target(name, cost, date)
         self.__targets.append(new_target)
 
     def total_income(self):
@@ -47,4 +47,12 @@ class TrakkiLogic:
             amount = expense.get_amount()
             total += float(str(amount))
 
+        return total
+    
+    def total_savings(self):
+        total = 0
+        for target in self.get_targets():
+            amount = target.get_saved()
+            total += float(str(amount))
+        
         return total

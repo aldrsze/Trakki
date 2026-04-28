@@ -82,7 +82,7 @@ def show_page(page_name):
             nav_buttons[name].configure(bg=COLOR_SIDEBAR_ACTIVE) # Changes the color if active
         else:
             nav_buttons[name].configure(bg=COLOR_SIDEBAR)
-            
+
     if page_name == "Dashboard":
         dashboard_view.refresh_dashboard(app_logic)
 
@@ -114,7 +114,7 @@ for item_name, builder_func in nav_items:
         bg=COLOR_MAIN_BG,
         fg="black"
     )
-    title_label.pack(anchor="n", padx=30, pady=(30, 10))
+    title_label.pack(anchor="n", padx=30)
 
     # content_box for the specific page
     content_box = tk.Frame(
@@ -123,7 +123,7 @@ for item_name, builder_func in nav_items:
         highlightbackground=COLOR_BORDER,
         highlightthickness=0
     )
-    content_box.pack(fill="both", expand=True, padx=40, pady=(0, 30))
+    content_box.pack(fill="both", expand=True, padx=40)
 
     builder_func(root, content_box, app_logic)
 

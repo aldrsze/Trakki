@@ -208,7 +208,7 @@ def view_expenses(root, content_box, logic):
         # Card Details
         amount_details = tk.Label(
             card,
-            text=amount,
+            text=f"₱{float(str(amount)):,.2f}",
             font=("Calibri", 20, "bold"),
             fg="black",
             bg=COLOR_CARD_BG
@@ -218,7 +218,7 @@ def view_expenses(root, content_box, logic):
         desc_details = tk.Label(
             card,
             text=desc,
-            font=("Calibri", 20),
+            font=("Calibri", 12),
             fg="#333333",
             bg=COLOR_CARD_BG,
             justify="left",

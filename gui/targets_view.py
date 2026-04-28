@@ -74,6 +74,20 @@ def view_targets(root, content_box, logic):
     target_input = tk.Entry(left_frame, **input_style)
     target_input.pack(fill="x", padx=20, pady=(0, 25), ipady=4)
 
+    def handle_submit():
+        item = item_input.get()
+        cost = cost_input.get()
+        date = target_input.get()
+
+        if item and cost:
+            logic.add_target(item, float(cost), date) # Send to OOP controller
+            refresh_cards()                   # Redraw the screen
+            
+            # Clear input boxes
+            item_input.delete(0, tk.END)
+            cost_input.delete(0, tk.END)
+            target_input.delete(0, tk.END)
+
     target_button = tk.Button(
         left_frame,
         text="Add Target",
@@ -82,7 +96,8 @@ def view_targets(root, content_box, logic):
         fg="white",
         bd=0,
         padx=15,
-        pady=8
+        pady=8,
+        command=handle_submit
     )
     target_button.pack(fill="x", padx=20)
 
@@ -145,7 +160,7 @@ def view_targets(root, content_box, logic):
             bg=COLOR_CARD_BG
         )
         name_label.pack(side="left")
-        
+
         # remove button
         remove_button = tk.Button(
             top_row,
@@ -168,25 +183,46 @@ def view_targets(root, content_box, logic):
         )
         edit_button.pack(side="right", padx=5)
 
+        # saved button
+        saved_button = tk.Button(
+            top_row,
+            text="Add Funds",
+            font=("Calibri", 10),
+            fg="green",
+            bg=COLOR_CARD_BG,
+            bd=0, cursor="hand2"
+        )
+        saved_button.pack(side="right")
+
         # cost
         cost_label = tk.Label(
             card,
-            text=cost_str,
+            text=f"₱{cost_str:,.2f}",
             font=("Calibri", 20, "bold"),
             fg="black", bg=COLOR_CARD_BG
         )
         cost_label.pack(anchor="w", padx=10)
 
         # description
-        desc_label = tk.Label(
+        saved_label = tk.Label(
             card,
-            text=f"Saved: {saved_str}  \n Needed: {needed_str}",
+            text=f"Saved: ₱{saved_str:,.2f}",
             font=("Calibri", 12),
             fg="#555555",
             bg=COLOR_CARD_BG
         )
-        desc_label.pack(anchor="w", padx=10, pady=(5,5))
+        saved_label.pack(anchor="w", padx=10)
         
+        # description
+        needed_label = tk.Label(
+            card,
+            text=f"Needed: ₱{needed_str:,.2f}",
+            font=("Calibri", 12),
+            fg="#555555",
+            bg=COLOR_CARD_BG
+        )
+        needed_label.pack(anchor="w", padx=10)
+
         # progress bar
         progress = ttk.Progressbar(
             card,
@@ -208,7 +244,34 @@ def view_targets(root, content_box, logic):
         )
         goal_label.pack(anchor="w", padx=10, pady=(5, 15))
 
-    # Dummy Data for UI display only (Logic/Calculations removed)
-    create_target_card(target_grid, 0, 0, "New Laptop", "₱1,200.00", "₱850.00", "₱350.00", 70.8, "Dec 25, 2026")
-    create_target_card(target_grid, 0, 1, "Vacation", "₱3,500.00", "₱1,200.00", "₱2,300.00", 34.2, "April 10, 2027")
+    def refresh_cards():
+        # Clear all existing targets cards 
+        for existing_card_widget in target_grid.winfo_children():
+            existing_card_widget.destroy()
+
+        # get all the targets data 
+        current_targets_list = logic.get_targets()
+
+        # Create and display a new card for each income
+        for targets_index in range(len(current_targets_list)):
+            # get the actual targets item from list using its current index.
+            target_item = current_targets_list[targets_index]
+
+            # 1 card per row
+            target_row = targets_index 
+            target_column = 0
+
+            # call a separate function to visually create one income card.
+            create_target_card(
+                parent=target_grid,
+                row=target_row,
+                col=target_column,
+                name=target_item.get_name(),
+                cost_str=target_item.get_cost(),
+                saved_str=target_item.get_saved(),
+                needed_str=target_item.get_needed(),
+                progress_val=target_item.get_progress(),
+                date=target_item.get_date()
+            )
+    refresh_cards()
 

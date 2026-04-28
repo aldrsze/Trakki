@@ -115,7 +115,7 @@ def refresh_dashboard(logic):
     create_container_card(cards_frame, 0, "Current Balance", "₱1,750.00", COLOR_SIDEBAR_ACTIVE)
     create_container_card(cards_frame, 1, "Total Income", f"₱{logic.total_income():,.2f}", "green")
     create_container_card(cards_frame, 2, "Total Expenses", f"₱{logic.total_expenses():,.2f}", "#EF4444")
-    create_container_card(cards_frame, 3, "Active Targets (#)", f"{len(logic.get_targets())} Goals", "black")
+    create_container_card(cards_frame, 3, "Total Savings", f"₱{logic.total_savings():,.2f}", "black")
 
     # matplotlib static Charts
     chart_area, bars_pos = plt.subplots(figsize=(8, 4), dpi=100)

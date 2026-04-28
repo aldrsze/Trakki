@@ -71,7 +71,7 @@ class TrakkiLogic:
 
         return total
     
-    def total_savings(self):
+    def total_saved(self):
         total = 0
         for target in self.get_targets():
             amount = target.get_saved()

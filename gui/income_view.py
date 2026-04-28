@@ -235,17 +235,32 @@ def view_income(root, content_box, logic):
         date_details.pack(anchor="w", padx=10, pady=(10, 15))
 
     def refresh_cards():
-        for widget in income_grid.winfo_children():
-            widget.destroy()
-        
-        incomes_list = logic.get_incomes()
-        
-        for index, item in enumerate(incomes_list):
-            row = index // 2
-            col = index % 2
+        # Clear all existing income cards 
+        for existing_card_widget in income_grid.winfo_children():
+            existing_card_widget.destroy()
+
+        # get all the incomes data 
+        current_incomes_list = logic.get_incomes()
+
+        # Create and display a new card for each income
+        for income_index in range(len(current_incomes_list)):
+            # get the actual income item from list using its current index.
+            income_item = current_incomes_list[income_index]
+
+            # calculate which row this card should go into.
+            target_row = income_index // 2  # Integer division by 2
+
+            # Calculate which column this card should go into.
+            target_column = income_index % 2 # Modulo 2 gives remainder (0 or 1)
+
+            # call a separate function to visually create one income card.
             create_income_card(
-                income_grid, row, col, 
-                item.get_amount(), item.get_category(), 
-                item.get_desc(), item.get_date()
+                parent=income_grid,
+                row=target_row,
+                col=target_column,
+                amount=income_item.get_amount(),
+                category=income_item.get_category(),
+                desc=income_item.get_desc(),
+                date=income_item.get_date()
             )
     refresh_cards()

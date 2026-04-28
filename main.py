@@ -5,6 +5,9 @@ from colors import *
 from gui import income_view
 from gui import expenses_view
 from gui import targets_view
+from gui import dashboard_view
+from gui import table_view
+from gui import ai_chat_view
 
 from logic.controller import TrakkiLogic
 
@@ -31,7 +34,7 @@ sidebar.pack_propagate(False) # Makes the sidebar fixed dimension
 # main area
 main_area = tk.Frame(
     root,
-    bg=COLOR_SIDEBAR_ACTIVE,
+    bg=COLOR_MAIN_BG, # Changed to COLOR_MAIN_BG, as active sidebar color is only for button
     highlightbackground='black',
     highlightthickness=1,
     bd=0,
@@ -51,28 +54,65 @@ app_name.pack(pady=(30, 50))
 main_area.grid_rowconfigure(0, weight=1)
 main_area.grid_columnconfigure(0, weight=1)
 
+# Dictionary to store the main Frame for each page (which will contain all its widgets)
 pages = {}
+# Dictionary to store navigation buttons
 nav_buttons = {}
 
 # FUNCTIONS 
 def show_page(page_name):
+    # Update navigation button styles
     for name in nav_buttons:
         if name == page_name:
             nav_buttons[name].configure(bg=COLOR_SIDEBAR_ACTIVE) # Changes the color if active
         else:
             nav_buttons[name].configure(bg=COLOR_SIDEBAR)
 
+    # Bring the selected page's frame to the front
     page_to_open = pages[page_name]
-    page_to_open.tkraise() # bring the page to front
+    page_to_open.tkraise()
 
-# navigation items
-nav_items = ["Dashboard", "Income", "Expenses", "Targets", "Table View", "AI Chat"]
+nav_items = [
+    ("Dashboard", dashboard_view.view_dashboard),
+    ("Income", income_view.view_income),
+    ("Expenses", expenses_view.view_expenses),
+    ("Targets", targets_view.view_targets),
+    ("Table View", table_view.view_table ), # No builder yet for Table View
+    ("AI Chat",  ai_chat_view.view_ai_chat)     # No builder yet for AI Chat
+]
 
-# I used a loop so it doesnt repeat the same code
-for item in nav_items:
+# Create all pages and their contents at startup
+for item_name, builder_func in nav_items:
+    # top-level frame for this page within the main_area
+    page_frame = tk.Frame(main_area, bg=COLOR_MAIN_BG)
+    page_frame.grid(row=0, column=0, sticky="nsew")
+    pages[item_name] = page_frame # Store this frame for show_page to access
+
+    # title label
+    title_label = tk.Label(
+        page_frame,
+        text= f"- {item_name.upper()} -",
+        font="Calibri 24 bold",
+        bg=COLOR_MAIN_BG,
+        fg="black"
+    )
+    title_label.pack(anchor="n", padx=30, pady=(30, 10))
+
+    # content_box for the specific page
+    content_box = tk.Frame(
+        page_frame, # parent is the page_frame
+        bg=COLOR_CONTENT_BG,
+        highlightbackground=COLOR_BORDER,
+        highlightthickness=0
+    )
+    content_box.pack(fill="both", expand=True, padx=40, pady=(0, 30))
+
+    builder_func(root, content_box, app_logic)
+
+    # navigation button for this page
     btn = tk.Button(
         sidebar,
-        text=item,
+        text=item_name,
         font="Calibri 16", # font
         bg=COLOR_SIDEBAR, # background
         fg="white", # foreground
@@ -81,40 +121,10 @@ for item in nav_items:
         padx=20,
         pady=10,
         cursor="hand2",
-        command=lambda name=item: show_page(name) # a way to put a function with parameter in a button 
+        command=lambda name=item_name: show_page(name) # a way to put a function with parameter in a button 
     )
     btn.pack(fill="x", pady=1)
-    nav_buttons[item] = btn # put it in a dictionary i made
-
-    # Page frame
-    page_frame = tk.Frame(main_area, bg=COLOR_MAIN_BG)
-    page_frame.grid(row=0, column=0, sticky="nsew")
-    pages[item] = page_frame # store it in a dict also
-
-    title_label = tk.Label(
-        page_frame,
-        text= f"- {item.upper()} -",
-        font="Calibri 24 bold",
-        bg=COLOR_MAIN_BG,
-        fg="black"
-    )
-    title_label.pack(anchor="n", padx=30, pady=(30, 10))
-
-    content_box = tk.Frame(
-        page_frame,
-        bg=COLOR_CONTENT_BG,
-        highlightbackground=COLOR_BORDER,
-        highlightthickness=0
-    )
-    content_box.pack(fill="both", expand=True, padx=40, pady=(0, 30))
-
-    # conditions on which file/module will run
-    if item == "Dashboard": pass
-    elif item == "Income": income_view.view_income(root, content_box, app_logic) 
-    elif item == "Expenses": expenses_view.view_expenses(root, content_box, app_logic)
-    elif item == "Targets": targets_view.view_targets(root, content_box, app_logic)
-    elif item == "Table View": pass
-    elif item == "AI Chat": pass
+    nav_buttons[item_name] = btn 
 
 # Logo
 original_logo = Image.open("res/TrakkiLogo.png") 

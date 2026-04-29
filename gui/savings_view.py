@@ -75,18 +75,24 @@ def view_savings(root, content_box, logic):
     target_input.pack(fill="x", padx=20, pady=(0, 25), ipady=4)
 
     def handle_submit():
-        item = item_input.get()
-        cost = cost_input.get()
-        date = target_input.get()
+        try:
+            item = item_input.get()
+            cost = cost_input.get()
+            date = target_input.get()
 
-        if item and cost:
-            logic.add_target(item, float(cost), date) # Send to OOP controller
-            refresh_cards()                   # Redraw the screen
-            
-            # Clear input boxes
-            item_input.delete(0, tk.END)
-            cost_input.delete(0, tk.END)
-            target_input.delete(0, tk.END)
+            if not item and cost and date:
+                tk.messagebox.showwarning("Error", "Invalid Input.")
+            else:
+                logic.add_target(item, float(cost), date) # Send to OOP controller
+                refresh_cards()                   # Redraw the screen
+                
+                # Clear input boxes
+                item_input.delete(0, tk.END)
+                cost_input.delete(0, tk.END)
+                target_input.delete(0, tk.END)
+        except ValueError:
+            tk.messagebox.showwarning("Error", "Invalid Input.")
+
 
     target_button = tk.Button(
         left_frame,

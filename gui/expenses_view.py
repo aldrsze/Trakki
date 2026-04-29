@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 from colors import *
-import logic
 
 def view_expenses(root, content_box, logic):
     # container
@@ -47,28 +46,57 @@ def view_expenses(root, content_box, logic):
     description_label = tk.Label(left_frame, text="Description:", bg=COLOR_CONTENT_BG, font=("Calibri", 14, "bold"))
     description_label.pack(anchor="w", padx=20)
     description_input = tk.Text(left_frame, height=6, wrap="word", **input_style)
-    description_input.pack(fill="x", padx=20, pady=(0, 25))
+    description_input.pack(fill="x", padx=20, pady=(0, 10))
+
+    # function for clearing input fields
+    def clear_fields():
+        amount_input.delete(0, tk.END)
+        category_input.delete(0, tk.END)
+        description_input.delete('1.0', tk.END)
+
+    def reset_form():
+        clear_fields()
+        editing_id[0] = None
+        page_title.config(text="Add New Expense")
+        submit_button.config(text="Add Expense")
+        cancel_button.pack_forget()  # Hide the cancel button
+
+    editing_id = [None]
 
     def handle_submit():
+        amount = amount_input.get()
+        category = category_input.get()
+        desc = description_input.get("1.0", "end-1c")
+
+        # Checks if all fields are not empty
+        if not amount or not category or not desc:
+            tk.messagebox.showwarning("Error", "All Fields are required.")
+            return
+        # catches unvalid number
         try:
-            amount = amount_input.get()
-            category = category_input.get()
-            desc = description_input.get("1.0", "end-1c")
-
-            if not amount and category and desc:
-                tk.messagebox.showwarning("Error", "Invalid Input.")
-            else:
-                logic.add_expense(amount, category, desc) # Send to OOP controller
-                refresh_cards() # Redraw the screen
-                # Clear input boxes
-                amount_input.delete(0, tk.END)
-                category_input.delete(0, tk.END)
-                description_input.delete('1.0', tk.END)
+            float(amount)
         except ValueError:
-            tk.messagebox.showwarning("Error", "Invalid Input.")
+            tk.messagebox.showwarning("Error", "Amount must be a number.")
+            return
 
+        if editing_id[0]:
+            logic.update_expense(editing_id[0], amount, category, desc)
+            tk.messagebox.showinfo("Success", "Update Expense Successful!")
+        else:
+            logic.add_expense(amount, category, desc)
+            tk.messagebox.showinfo("Success", "Add expense Successful!")
+        
+        refresh_cards()
+        reset_form()
+
+    # Pack the submit button
     submit_button = tk.Button(left_frame, text="Add Expense", bg=COLOR_SIDEBAR, font=("Calibri", 14, "bold"), fg="white", bd=0, padx=15, pady=8, command=handle_submit)
-    submit_button.pack(fill="x", padx=20)
+    submit_button.pack(fill="x", padx=20, pady=(10, 5)) 
+
+    # Pack the cancel button
+    cancel_button = tk.Button(left_frame, text="Cancel", bg="#EF4444", font=("Calibri", 14, "bold"), fg="white", bd=0, padx=15, pady=8, command=reset_form)
+    cancel_button.pack(fill="x", padx=20, pady=(0, 10)) 
+    cancel_button.pack_forget()  # hide (only show when edit is pressed)
 
     # right frame
     right_frame = tk.Frame(split_container, bg=COLOR_CONTENT_BG)
@@ -100,10 +128,22 @@ def view_expenses(root, content_box, logic):
             response = tk.messagebox.askyesno("Delete", "Are you sure you want to delete?")
             if response:
                 logic.remove_expense(expense_id)  # Call the logic to remove income
+                tk.messagebox.showinfo("Success", "Deletion of Expense Successful!")
                 refresh_cards()  # Refresh the cards to reflect changes
-        elif action == "edit":
-            # Logic for editing income can be added here
-            print(f"Edit action triggered for expense ID: {expense_id}")
+        elif action == "edit": 
+            for item in logic.get_expenses():
+                if item.get_expense_id() == expense_id:
+                    editing_id[0] = expense_id
+                    page_title.config(text="Edit Expense")
+                    submit_button.config(text="Update Expense")
+                    amount_input.delete(0, tk.END) # delete input
+                    amount_input.insert(0, item.get_amount()) # insert current data
+                    category_input.delete(0, tk.END)
+                    category_input.insert(0, item.get_category())
+                    description_input.delete('1.0', tk.END)
+                    description_input.insert('1.0', item.get_desc())
+                    cancel_button.pack(fill="x", padx=20, pady=(5, 0))
+                    break
 
     def create_expense_card(parent, row, col, expense_id, amount, category, desc, date):
         # card

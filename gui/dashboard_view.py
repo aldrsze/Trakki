@@ -19,6 +19,7 @@ def view_dashboard(root, content_box, logic):
 
 def refresh_dashboard(logic):
     global _dashboard_content_box
+
     if _dashboard_content_box is None:
         return
 
@@ -27,88 +28,39 @@ def refresh_dashboard(logic):
         widget.destroy()
 
     # Header frame (the one with filtering)
-    header_frame = tk.Frame(
-        _dashboard_content_box,
-        bg=COLOR_CONTENT_BG
-    )
+    header_frame = tk.Frame(_dashboard_content_box, bg=COLOR_CONTENT_BG)
     header_frame.pack(fill="x", padx=20, pady=10)
 
-    title = tk.Label(
-        header_frame, 
-        text="Financial Overview",
-        font=("Calibri", 16, "bold"),
-        bg=COLOR_CONTENT_BG
-    )
+    title = tk.Label(header_frame, text="Financial Overview", font=("Calibri", 16, "bold"), bg=COLOR_CONTENT_BG)
     title.pack(side="left")
 
-    filter_frame = tk.Frame(
-        header_frame,
-        bg=COLOR_CARD_BG,
-        highlightbackground=COLOR_BORDER
-    )
+    filter_frame = tk.Frame(header_frame, bg=COLOR_CARD_BG, highlightbackground=COLOR_BORDER)
     filter_frame.pack(side="right")
 
     # timeframes list
     timeframes = ["Daily", "Weekly", "Monthly", "Yearly"]
-
     for tf in timeframes:
-
-        timeframe_btn = tk.Button(
-            filter_frame,
-            text=tf,
-            font=("Calibri", 9, "bold"),
-            bg="white",
-            fg="#555555",
-            bd=0,
-            padx=15,
-            pady=6,
-            cursor="hand2"
-        )
+        timeframe_btn = tk.Button(filter_frame, text=tf, font=("Calibri", 9, "bold"), bg="white", fg="#555555", bd=0, padx=15, pady=6, cursor="hand2")
         timeframe_btn.pack(side="left")
 
     # containers (cards)
-    cards_frame = tk.Frame(
-        _dashboard_content_box,
-        bg=COLOR_CONTENT_BG
-    )
+    cards_frame = tk.Frame(_dashboard_content_box, bg=COLOR_CONTENT_BG)
     cards_frame.pack(fill="x", padx=20, pady=(0, 20))
     cards_frame.grid_rowconfigure(0, weight=1)
-
-    chart_frame = tk.Frame(
-        _dashboard_content_box,
-        bg=COLOR_CONTENT_BG,
-        highlightbackground=COLOR_BORDER
-    )
+    chart_frame = tk.Frame(_dashboard_content_box, bg=COLOR_CONTENT_BG, highlightbackground=COLOR_BORDER)
     chart_frame.pack(fill="both", expand=True, padx=30, pady=(0, 20))
 
     # function for creating cards container
     def create_container_card(parent, col, title, text_val, value_color="black"):
         # frame
-        card = tk.Frame(
-            parent,
-            bg=COLOR_CARD_BG,
-            highlightbackground=COLOR_BORDER
-        )
+        card = tk.Frame(parent, bg=COLOR_CARD_BG, highlightbackground=COLOR_BORDER)
         card.grid(row=0, column=col, padx=10, pady=10, sticky="nsew")
         parent.grid_columnconfigure(col, weight=1)
-        
-        # label
-        container_label = tk.Label(
-            card,
-            text=title,
-            font=("Calibri", 11),
-            bg=COLOR_CARD_BG,
-            fg="#555555"
-        )
-        container_label.pack(expand=True, side="bottom", pady=(0, 10))
 
-        value_label = tk.Label(
-            card, 
-            text=text_val,
-            font=("Calibri", 18, "bold"),
-            bg=COLOR_CARD_BG,
-            fg=value_color
-        )
+        # label
+        container_label = tk.Label(card, text=title, font=("Calibri", 11), bg=COLOR_CARD_BG, fg="#555555")
+        container_label.pack(expand=True, side="bottom", pady=(0, 10))
+        value_label = tk.Label(card, text=text_val, font=("Calibri", 18, "bold"), bg=COLOR_CARD_BG, fg=value_color)
         value_label.pack(expand=True, side="top", pady=(10, 0))
 
     # static UI Cards
@@ -124,7 +76,7 @@ def refresh_dashboard(logic):
 
     # categories list
     categories = ['Income', 'Expenses', 'Target Savings']
-    
+
     # amounts list (with logic data)
     amounts = [logic.total_income(), logic.total_expenses(), logic.total_saved()]
 
@@ -138,7 +90,7 @@ def refresh_dashboard(logic):
     bars_pos.spines['right'].set_visible(False) # remove right border
     bars_pos.spines['left'].set_color(COLOR_BORDER)
     bars_pos.spines['bottom'].set_color(COLOR_BORDER)
-    bars_pos.tick_params(colors="#64748B")
+    bars_pos.tick_params(colors="#64748B") # color of side nums
     bars_pos.set_title('Cash Flow Overview', color=COLOR_SIDEBAR, pad=20, fontsize=14, fontweight='bold')
 
     for bar in bars:

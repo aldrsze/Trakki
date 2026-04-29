@@ -14,11 +14,7 @@ def view_expenses(root, content_box, logic):
     split_container.grid_rowconfigure(0, weight=1)
 
     # left frame
-    left_frame = tk.Frame(
-        split_container,
-        bg=COLOR_CONTENT_BG,
-        highlightbackground=COLOR_BORDER
-    )
+    left_frame = tk.Frame(split_container, bg=COLOR_CONTENT_BG, highlightbackground=COLOR_BORDER)
     left_frame.grid(row=0, column=0, sticky="nsew", padx=(10, 5), pady=10)
 
     # a dictionary to store the design of the input boxes
@@ -32,47 +28,24 @@ def view_expenses(root, content_box, logic):
     }
 
     # page title
-    page_title = tk.Label(
-        left_frame,
-        text="Add New Expense",
-        font=("Calibri", 18, "bold"),
-        bg = COLOR_CONTENT_BG
-    )
+    page_title = tk.Label(left_frame, text="Add New Expense", font=("Calibri", 18, "bold"), bg=COLOR_CONTENT_BG)
     page_title.pack(pady=20, anchor="w", padx=20)
 
     # Amount input Field
-    amount_label = tk.Label(
-        left_frame,
-        text="Amount:",
-        bg=COLOR_CONTENT_BG,
-        font=("Calibri", 14, "bold")
-    )
+    amount_label = tk.Label(left_frame, text="Amount:", bg=COLOR_CONTENT_BG, font=("Calibri", 14, "bold"))
     amount_label.pack(anchor="w", padx=20)
-
     amount_input = tk.Entry(left_frame, **input_style)
     amount_input.pack(fill="x", padx=20, pady=(0, 15), ipady=2)
 
     # category input field
-    category_label = tk.Label(
-        left_frame,
-        text="Category:",
-        bg=COLOR_CONTENT_BG,
-        font=("Calibri", 14, "bold")
-    )
+    category_label = tk.Label(left_frame, text="Category:", bg=COLOR_CONTENT_BG, font=("Calibri", 14, "bold"))
     category_label.pack(anchor="w", padx=20)
-
     category_input = tk.Entry(left_frame, **input_style)
     category_input.pack(fill="x", padx=20, pady=(0, 15), ipady=2)
 
     # descrioption input field
-    description_label = tk.Label(
-        left_frame,
-        text="Description:",
-        bg=COLOR_CONTENT_BG,
-        font=("Calibri", 14, "bold")
-    )
+    description_label = tk.Label(left_frame, text="Description:", bg=COLOR_CONTENT_BG, font=("Calibri", 14, "bold"))
     description_label.pack(anchor="w", padx=20)
-
     description_input = tk.Text(left_frame, height=6, wrap="word", **input_style)
     description_input.pack(fill="x", padx=20, pady=(0, 25))
 
@@ -86,8 +59,7 @@ def view_expenses(root, content_box, logic):
                 tk.messagebox.showwarning("Error", "Invalid Input.")
             else:
                 logic.add_expense(amount, category, desc) # Send to OOP controller
-                refresh_cards()                   # Redraw the screen
-                
+                refresh_cards() # Redraw the screen
                 # Clear input boxes
                 amount_input.delete(0, tk.END)
                 category_input.delete(0, tk.END)
@@ -95,79 +67,37 @@ def view_expenses(root, content_box, logic):
         except ValueError:
             tk.messagebox.showwarning("Error", "Invalid Input.")
 
-    submit_button = tk.Button(
-        left_frame,
-        text="Add Expense",
-        bg=COLOR_SIDEBAR,
-        font=("Calibri", 14, "bold"),
-        fg="white",
-        bd=0,
-        padx=15,
-        pady=8,
-        command=handle_submit
-    )
+    submit_button = tk.Button(left_frame, text="Add Expense", bg=COLOR_SIDEBAR, font=("Calibri", 14, "bold"), fg="white", bd=0, padx=15, pady=8, command=handle_submit)
     submit_button.pack(fill="x", padx=20)
 
     # right frame
-    right_frame = tk.Frame(
-        split_container,
-        bg=COLOR_CONTENT_BG
-    )
-    right_frame.grid(
-        row=0,
-        column=1,
-        sticky="nsew",
-        padx=(5, 10),
-        pady=10
-    )
+    right_frame = tk.Frame(split_container, bg=COLOR_CONTENT_BG)
+    right_frame.grid(row=0, column=1, sticky="nsew", padx=(5, 10), pady=10)
 
     # Canvas - frame that can move up and down
-    canvas = tk.Canvas(
-        right_frame,
-        bg=COLOR_CONTENT_BG,
-        highlightthickness=0
-    )
+    canvas = tk.Canvas(right_frame, bg=COLOR_CONTENT_BG, highlightthickness=0)
 
     # scrollbar for the canvas
-    scrollbar = ttk.Scrollbar(
-        right_frame,
-        orient='vertical',
-        command=canvas.yview
-    )
+    scrollbar = ttk.Scrollbar(right_frame, orient='vertical', command=canvas.yview)
 
     # Frame for the cards in the canvas
-    expense_grid = tk.Frame(
-        canvas,
-        bg=COLOR_CONTENT_BG
-    )
+    expense_grid = tk.Frame(canvas, bg=COLOR_CONTENT_BG)
 
     # determines how long the list for the scrolling
-    expense_grid.bind(
-        "<Configure>",
-        lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
-    )
+    expense_grid.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
 
     # put frame inside canvas window
-    canvas_window = canvas.create_window(
-        (0,0),
-        window=expense_grid,
-        anchor="nw"
-    )
+    canvas_window = canvas.create_window((0, 0), window=expense_grid, anchor="nw")
 
     # link scrollbar and canvas
     canvas.configure(yscrollcommand=scrollbar.set)
-
     scrollbar.pack(side="right", fill="y")
     canvas.pack(side="left", fill="both", expand=True)
-
-    canvas.bind(
-        "<Configure>",
-        lambda e: canvas.itemconfig(canvas_window, width=e.width)
-    )
+    canvas.bind("<Configure>", lambda e: canvas.itemconfig(canvas_window, width=e.width))
 
     def handle_card_action(action, expense_id):
         if action == "remove":
-            response  = tk.messagebox.askyesno("Delete", "Are you sure you want to delete?")
+            response = tk.messagebox.askyesno("Delete", "Are you sure you want to delete?")
             if response:
                 logic.remove_expense(expense_id)  # Call the logic to remove income
                 refresh_cards()  # Refresh the cards to reflect changes
@@ -176,7 +106,6 @@ def view_expenses(root, content_box, logic):
             print(f"Edit action triggered for expense ID: {expense_id}")
 
     def create_expense_card(parent, row, col, expense_id, amount, category, desc, date):
-
         # card
         card = tk.Frame(parent, bg=COLOR_CARD_BG, highlightbackground=COLOR_BORDER)
         card.grid(row=row, column=col, padx=10, pady=10, sticky="nsew")
@@ -187,81 +116,38 @@ def view_expenses(root, content_box, logic):
         top_row.pack(fill="x", padx=10, pady=(10, 5))
 
         # category
-        c_label = tk.Label(
-            top_row,
-            text=category.upper(),
-            font=("Calibri", 9, "bold"),
-            fg="#10B981",
-            bg=COLOR_CARD_BG,
-        )
+        c_label = tk.Label(top_row, text=category.upper(), font=("Calibri", 9, "bold"), fg="#10B981", bg=COLOR_CARD_BG)
         c_label.pack(side="left")
 
-        # remove button 
-        t_button = tk.Button(
-            top_row,
-            text="Remove",
-            font=("Calibri", 10),
-            fg="#EF4444",
-            bg=COLOR_CARD_BG,
-            bd=0,
-            cursor="hand2",
-            command=lambda: handle_card_action("remove", expense_id)
-        )
+        # remove button
+        t_button = tk.Button(top_row, text="Remove", font=("Calibri", 10), fg="#EF4444", bg=COLOR_CARD_BG, bd=0, cursor="hand2", command=lambda: handle_card_action("remove", expense_id))
         t_button.pack(side="right")
 
-        # Edit button 
-        e_button = tk.Button(
-            top_row,
-            text="Edit",
-            font=("Calibri", 10),
-            fg="#64748B",
-            bg=COLOR_CARD_BG,
-            bd=0,
-            cursor="hand2",
-            command=lambda: handle_card_action("edit", expense_id)
-        )
+        # Edit button
+        e_button = tk.Button(top_row, text="Edit", font=("Calibri", 10), fg="#64748B", bg=COLOR_CARD_BG, bd=0, cursor="hand2", command=lambda: handle_card_action("edit", expense_id))
         e_button.pack(side="right", padx=5)
 
         # Card Details
-        amount_details = tk.Label(
-            card,
-            text=f"₱{float(str(amount)):,.2f}",
-            font=("Calibri", 20, "bold"),
-            fg="black",
-            bg=COLOR_CARD_BG
-        )
+        amount_details = tk.Label(card, text=f"₱{float(str(amount)):,.2f}", font=("Calibri", 20, "bold"), fg="black", bg=COLOR_CARD_BG)
         amount_details.pack(anchor="w", padx=10)
 
-        desc_details = tk.Label(
-            card,
-            text=desc,
-            font=("Calibri", 12),
-            fg="#333333",
-            bg=COLOR_CARD_BG,
-            justify="left",
-            wraplength=200
-        )
+        desc_details = tk.Label(card, text=desc, font=("Calibri", 12), fg="#333333", bg=COLOR_CARD_BG, justify="left", wraplength=200)
         desc_details.pack(anchor="w", padx=10, pady=(5, 0))
 
-        date_details = tk.Label(
-            card,
-            text=date,
-            font=("Calibri", 10),
-            fg="#888888",
-            bg=COLOR_CARD_BG
-        )
+        date_details = tk.Label(card, text=date, font=("Calibri", 10), fg="#888888", bg=COLOR_CARD_BG)
         date_details.pack(anchor="w", padx=10, pady=(10, 15))
 
     def refresh_cards():
-        # Clear all existing income cards 
+        # Clear all existing income cards
         for existing_card_widget in expense_grid.winfo_children():
             existing_card_widget.destroy()
 
-        # get all the incomes data 
+        # get all the incomes data
         current_expenses_list = logic.get_expenses()
 
         # Create and display a new card for each income
         card_pos = 0 # starts at 0 each time so it generates at the top
+
         for expense_index in range(len(current_expenses_list) - 1, -1, -1): # reversed
             # get the actual income item from list using its current index.
             expense_item = current_expenses_list[expense_index]
@@ -273,15 +159,8 @@ def view_expenses(root, content_box, logic):
             target_column = card_pos % 2 # Modulo 2 gives remainder (0 or 1)
 
             # call a separate function to visually create one income card.
-            create_expense_card(
-                parent=expense_grid,
-                row=target_row,
-                col=target_column,
-                expense_id=expense_item.get_expense_id(),  # use the id from the expense object
-                amount=expense_item.get_amount(),
-                category=expense_item.get_category(),
-                desc=expense_item.get_desc(),
-                date=expense_item.get_date()
-            )
+            create_expense_card(parent=expense_grid, row=target_row, col=target_column, expense_id=expense_item.get_expense_id(), amount=expense_item.get_amount(), category=expense_item.get_category(), desc=expense_item.get_desc(), date=expense_item.get_date())
+
             card_pos += 1
+
     refresh_cards()

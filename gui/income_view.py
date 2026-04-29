@@ -251,15 +251,15 @@ def view_income(root, content_box, logic):
         current_incomes_list = logic.get_incomes()
 
         # Create and display a new card for each income
-        for income_index in range(len(current_incomes_list)):
+        card_pos = 0 # starts at 0 each time so it generates at the top
+        for income_index in range(len(current_incomes_list) - 1, -1, -1): # reversed
             # get the actual income item from list using its current index.
             income_item = current_incomes_list[income_index]
 
             # calculate which row this card should go into.
-            target_row = income_index // 2  # Integer division by 2
-
+            target_row = card_pos // 2
             # Calculate which column this card should go into.
-            target_column = income_index % 2 # Modulo 2 gives remainder (0 or 1)
+            target_column = card_pos % 2 # Modulo 2 gives remainder (0 or 1)
 
             # call a separate function to visually create one income card.
             create_income_card(
@@ -272,4 +272,5 @@ def view_income(root, content_box, logic):
                 desc=income_item.get_desc(),
                 date=income_item.get_date()
             )
+            card_pos += 1
     refresh_cards()

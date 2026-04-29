@@ -261,15 +261,16 @@ def view_expenses(root, content_box, logic):
         current_expenses_list = logic.get_expenses()
 
         # Create and display a new card for each income
-        for expense_index in range(len(current_expenses_list)):
+        card_pos = 0 # starts at 0 each time so it generates at the top
+        for expense_index in range(len(current_expenses_list) - 1, -1, -1): # reversed
             # get the actual income item from list using its current index.
             expense_item = current_expenses_list[expense_index]
 
             # calculate which row this card should go into.
-            target_row = expense_index // 2  # Integer division by 2
+            target_row = card_pos // 2
 
             # Calculate which column this card should go into.
-            target_column = expense_index % 2 # Modulo 2 gives remainder (0 or 1)
+            target_column = card_pos % 2 # Modulo 2 gives remainder (0 or 1)
 
             # call a separate function to visually create one income card.
             create_expense_card(
@@ -282,4 +283,5 @@ def view_expenses(root, content_box, logic):
                 desc=expense_item.get_desc(),
                 date=expense_item.get_date()
             )
+            card_pos += 1
     refresh_cards()

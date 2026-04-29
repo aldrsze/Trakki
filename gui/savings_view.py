@@ -272,12 +272,13 @@ def view_savings(root, content_box, logic):
         current_savings_list = logic.get_savings()
 
         # Create and display a new card for each income
-        for savings_index in range(len(current_savings_list)):
+        card_pos = 0 # starts at 0 each time so it generates at the top
+        for savings_index in range(len(current_savings_list) - 1, -1, -1): # reversed
             # get the actual savings item from list using its current index.
             target_savings = current_savings_list[savings_index]
 
             # 1 card per row
-            target_row = savings_index 
+            target_row = card_pos
             target_column = 0
 
             # call a separate function to visually create one income card.
@@ -293,5 +294,6 @@ def view_savings(root, content_box, logic):
                 progress_val=target_savings.get_progress(),
                 date=target_savings.get_date()
             )
+            card_pos += 1
     refresh_cards()
 

@@ -1,3 +1,11 @@
+import sys
+import os
+
+# Add lib directory to Python path for local packages
+lib_path = os.path.join(os.path.dirname(__file__), 'lib')
+if lib_path not in sys.path:
+    sys.path.insert(0, lib_path)
+
 import tkinter as tk
 from PIL import Image, ImageTk
 from colors import *
@@ -62,11 +70,8 @@ def show_page(page_name):
         else:
             nav_buttons[name].configure(bg=COLOR_SIDEBAR)
 
-    # automatic refresh when clicked
     if page_name == "Dashboard":
         dashboard_view.refresh_dashboard(app_logic)
-    if page_name == "Table View":
-        table_view.refresh_table(app_logic)
 
     # Bring the selected page's frame to the front
     page_to_open = pages[page_name]

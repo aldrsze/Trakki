@@ -3,6 +3,10 @@ from colors import *
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+from logic.controller import TrakkiLogic
+
+logic = TrakkiLogic()
+
 # Global reference to store the content box for refreshing
 _dashboard_content_box = None
 
@@ -32,12 +36,6 @@ def refresh_dashboard(logic):
 
     filter_frame = tk.Frame(header_frame, bg=COLOR_CARD_BG, highlightbackground=COLOR_BORDER)
     filter_frame.pack(side="right")
-
-    # timeframes list
-    timeframes = ["Daily", "Weekly", "Monthly", "Yearly"]
-    for tf in timeframes:
-        timeframe_btn = tk.Button(filter_frame, text=tf, font=("Calibri", 9, "bold"), bg="white", fg="#555555", bd=0, padx=15, pady=6, cursor="hand2")
-        timeframe_btn.pack(side="left")
 
     # containers (cards)
     cards_frame = tk.Frame(_dashboard_content_box, bg=COLOR_CONTENT_BG)

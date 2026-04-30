@@ -1,13 +1,8 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from colors import *
 
 def view_expenses(root, content_box, logic):
-    # clean everything on content box
-    all_widgets = content_box.winfo_children()
-    for w in all_widgets:
-        w.destroy()
-        
     # container
     split_container = tk.Frame(content_box, bg=COLOR_CONTENT_BG)
     split_container.pack(fill="both", expand=True, padx=10, pady=10)
@@ -79,15 +74,46 @@ def view_expenses(root, content_box, logic):
             return
         # catches unvalid number
         try:
-            float(amount)
+            amount_float = float(amount)
         except ValueError:
             tk.messagebox.showwarning("Error", "Amount must be a number.")
             return
 
+        # Check if expense exceeds current balance
+        total_income = sum(i.get_amount() for i in logic.get_incomes())
+        
         if editing_id[0]:
+            # For edits: exclude the old expense from total to get real available balance
+            old_expense = next((e for e in logic.get_expenses() if e.get_expense_id() == editing_id[0]), None)
+            if old_expense:
+                # Calculate expenses without the one being edited
+                total_expenses_excluding_old = sum(e.get_amount() for e in logic.get_expenses() if e.get_expense_id() != editing_id[0])
+                available_balance = total_income - total_expenses_excluding_old
+            else:
+                total_expenses = sum(e.get_amount() for e in logic.get_expenses())
+                available_balance = total_income - total_expenses
+            
+            if amount_float > available_balance:
+                tk.messagebox.showwarning(
+                    "Insufficient Balance",
+                    f"Your updated expense of ₱{amount_float:,.2f} exceeds your available balance of ₱{available_balance:,.2f}.\n\nExpense was not updated."
+                )
+                return
+            
             logic.update_expense(editing_id[0], amount, category, desc)
             tk.messagebox.showinfo("Success", "Update Expense Successful!")
         else:
+            # For new expenses: check against current balance
+            total_expenses = sum(e.get_amount() for e in logic.get_expenses())
+            current_balance = total_income - total_expenses
+            
+            if amount_float > current_balance:
+                tk.messagebox.showwarning(
+                    "Insufficient Balance",
+                    f"Your expense of ₱{amount_float:,.2f} exceeds your current balance of ₱{current_balance:,.2f}.\n\nExpense was not added."
+                )
+                return
+            
             logic.add_expense(amount, category, desc)
             tk.messagebox.showinfo("Success", "Add expense Successful!")
         

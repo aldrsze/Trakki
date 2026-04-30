@@ -9,32 +9,29 @@ class TrakkiLogic:
         self.__next_income_id = 1
         self.__next_expense_id = 1
         self.__next_target_id = 1
+        
+        # Sample Income Data
+        self.add_income(4500.00, "Primary Salary", "Monthly base pay from employer")
+        self.add_income(850.00, "Side Hustle", "E-commerce store monthly profit")
+        self.add_income(1000.00, "Real Estate", "Rental property income")
+        self.add_income(120.00, "Investments", "Quarterly dividend payouts")
 
-        # Sample Income Data 
-        # Format: amount, category, desc, created_at
-        self.add_income(4500.00, "Primary Salary", "Monthly base pay from employer", "2026-04-01 09:00:00")
-        self.add_income(850.00, "Side Hustle", "E-commerce store monthly profit", "2026-04-10 14:30:00")
-        self.add_income(1000.00, "Real Estate", "Rental property income", "2026-04-15 10:00:00")
-        self.add_income(120.00, "Investments", "Quarterly dividend payouts", "2026-04-20 11:15:00")
-
-        # Sample Expense Data 
-        # Format: amount, category, desc, created_at
-        self.add_expense(1500.00, "Housing", "Monthly rent/mortgage payment", "2026-04-02 08:00:00")
-        self.add_expense(400.00, "Groceries", "Weekly supermarket runs", "2026-04-05 18:45:00")
-        self.add_expense(200.00, "Utilities", "Electricity, Water, and Fiber Internet", "2026-04-08 09:30:00")
-        self.add_expense(350.00, "Transportation", "Car loan and gas", "2026-04-12 17:20:00")
-        self.add_expense(150.00, "Dining Out", "Weekend restaurants and cafes", "2026-04-16 20:00:00")
-        self.add_expense(50.00, "Health", "Monthly Gym Membership", "2026-04-18 07:00:00")
-        self.add_expense(45.00, "Subscriptions", "Netflix, Spotify, and Cloud Storage", "2026-04-21 10:00:00")
-        self.add_expense(120.00, "Personal", "Clothing and personal care", "2026-04-25 15:30:00")
+        # Sample Expense Data
+        self.add_expense(1500.00, "Housing", "Monthly rent/mortgage payment")
+        self.add_expense(400.00, "Groceries", "Weekly supermarket runs")
+        self.add_expense(200.00, "Utilities", "Electricity, Water, and Fiber Internet")
+        self.add_expense(350.00, "Transportation", "Car loan and gas")
+        self.add_expense(150.00, "Dining Out", "Weekend restaurants and cafes")
+        self.add_expense(50.00, "Health", "Monthly Gym Membership")
+        self.add_expense(45.00, "Subscriptions", "Netflix, Spotify, and Cloud Storage")
+        self.add_expense(120.00, "Personal", "Clothing and personal care")
 
         # Sample Target Data (Savings Goals)
-        # Format: name, cost, goal_date, saved_amount, created_at
-        self.add_target("Japan Trip 2027", 4000.00, "2027-11-10 00:00:00", 500.00, "2026-04-03 12:00:00")
-        self.add_target("House Down Payment", 30000.00, "2030-01-01 00:00:00", 1000.00, "2026-04-07 10:00:00")
-        self.add_target("New Smartphone", 1000.00, "2026-08-15 00:00:00", 450.00, "2026-04-14 16:00:00")
-        self.add_target("6-Month Emergency Fund", 12000.00, "2026-12-31 00:00:00", 800.00, "2026-04-19 09:00:00")
-        self.add_target("Christmas Gifts", 500.00, "2026-12-01 00:00:00", 100.00, "2026-04-26 14:00:00")
+        self.add_target("Japan Trip 2027", 4000.00, "Nov 10, 2027", 500.00)
+        self.add_target("House Down Payment", 30000.00, "Jan 01, 2030", 1000.00)
+        self.add_target("New Smartphone", 1000.00, "Aug 15, 2026", 450.00)
+        self.add_target("6-Month Emergency Fund", 12000.00, "Dec 31, 2026", 800.00)
+        self.add_target("Christmas Gifts", 500.00, "Dec 01, 2026", 100.00)
 
     # Instance Methods to retrieve the encapsulated lists
     def get_expenses(self): 
@@ -47,8 +44,8 @@ class TrakkiLogic:
         return self.__savings
 
     # Instance Methods to ADD new data using the Models
-    def add_expense(self, amount, category, desc, date_string=None):
-        new_expense = Expense(self.__next_expense_id, amount, category, desc, date_string)
+    def add_expense(self, amount, category, desc):
+        new_expense = Expense(self.__next_expense_id, amount, category, desc)
         self.__expenses.append(new_expense) 
         self.__next_expense_id += 1 # increase per add
         
@@ -67,8 +64,8 @@ class TrakkiLogic:
                 self.__expenses.pop(expense)
                 break  # Stop after finding and removing the first match
 
-    def add_income(self, amount, category, desc, date_string=None):
-        new_income = Income(self.__next_income_id, amount, category, desc, date_string)
+    def add_income(self, amount, category, desc):
+        new_income = Income(self.__next_income_id, amount, category, desc)
         self.__incomes.append(new_income)
         self.__next_income_id += 1 # increase it per add
 
@@ -87,8 +84,8 @@ class TrakkiLogic:
                 self.__incomes.pop(income)
                 break  # Stop after finding and removing the first match
 
-    def add_target(self, name, cost, date, saved=0.0, created_at=None):
-        new_target = Target(self.__next_target_id, name, cost, date, saved, created_at)
+    def add_target(self, name, cost, date, saved=0.0):
+        new_target = Target(self.__next_target_id, name, cost, date, saved)
         self.__savings.append(new_target)
         self.__next_target_id += 1 # increase per add
 

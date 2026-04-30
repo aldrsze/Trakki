@@ -40,6 +40,6 @@ Trakki is a Python-based desktop application built with Tkinter that helps you e
 * **GUI Framework:** Tkinter
 * **Data Visualization:** Matplotlib
 * **AI Integration:** Groq API (via the `requests` library)
-```
-###
+
+##  
 -Aldrsze.

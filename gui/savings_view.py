@@ -3,6 +3,11 @@ from tkinter import ttk
 from colors import *
 
 def view_savings(root, content_box, logic):
+    # clean everything on content box
+    all_widgets = content_box.winfo_children()
+    for w in all_widgets:
+        w.destroy()
+
     # container
     split_container = tk.Frame(content_box, bg=COLOR_CONTENT_BG)
     split_container.pack(fill="both", expand=True, padx=10, pady=10)
@@ -42,7 +47,7 @@ def view_savings(root, content_box, logic):
     cost_input.pack(fill="x", padx=20, pady=(0, 15), ipady=4)
 
     # target date
-    target_label = tk.Label(left_frame, text="Target Date (MM/DD/YYYY):", bg=COLOR_CONTENT_BG, font=("Calibri", 14, "bold"))
+    target_label = tk.Label(left_frame, text="Target Date (YYYY-MM-DD):", bg=COLOR_CONTENT_BG, font=("Calibri", 14, "bold"))
     target_label.pack(anchor="w", padx=20)
     target_input = tk.Entry(left_frame, **input_style)
     target_input.pack(fill="x", padx=20, pady=(0, 10), ipady=4)

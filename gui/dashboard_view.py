@@ -3,10 +3,6 @@ from colors import *
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-from logic.controller import TrakkiLogic
-
-logic = TrakkiLogic()
-
 # Global reference to store the content box for refreshing
 _dashboard_content_box = None
 

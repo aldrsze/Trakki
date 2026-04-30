@@ -3,6 +3,11 @@ from tkinter import ttk
 from colors import *
 
 def view_expenses(root, content_box, logic):
+    # clean everything on content box
+    all_widgets = content_box.winfo_children()
+    for w in all_widgets:
+        w.destroy()
+        
     # container
     split_container = tk.Frame(content_box, bg=COLOR_CONTENT_BG)
     split_container.pack(fill="both", expand=True, padx=10, pady=10)

@@ -62,8 +62,11 @@ def show_page(page_name):
         else:
             nav_buttons[name].configure(bg=COLOR_SIDEBAR)
 
+    # automatic refresh when clicked
     if page_name == "Dashboard":
         dashboard_view.refresh_dashboard(app_logic)
+    if page_name == "Table View":
+        table_view.refresh_table(app_logic)
 
     # Bring the selected page's frame to the front
     page_to_open = pages[page_name]

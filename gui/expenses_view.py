@@ -193,7 +193,7 @@ def view_expenses(root, content_box, logic):
         top_row.pack(fill="x", padx=10, pady=(10, 5))
 
         # category
-        c_label = tk.Label(top_row, text=category.upper(), font=("Calibri", 9, "bold"), fg="#10B981", bg=COLOR_CARD_BG)
+        c_label = tk.Label(top_row, text=category.upper(), font=("Calibri", 9, "bold"), fg="red", bg=COLOR_CARD_BG)
         c_label.pack(side="left")
 
         # remove button
@@ -205,7 +205,7 @@ def view_expenses(root, content_box, logic):
         e_button.pack(side="right", padx=5)
 
         # Card Details
-        amount_details = tk.Label(card, text=f"₱{float(str(amount)):,.2f}", font=("Calibri", 20, "bold"), fg="black", bg=COLOR_CARD_BG)
+        amount_details = tk.Label(card, text=f"-₱{float(str(amount)):,.2f}", font=("Calibri", 20, "bold"), fg="black", bg=COLOR_CARD_BG)
         amount_details.pack(anchor="w", padx=10)
 
         desc_details = tk.Label(card, text=desc, font=("Calibri", 12), fg="#333333", bg=COLOR_CARD_BG, justify="left", wraplength=200)

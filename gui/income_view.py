@@ -69,7 +69,7 @@ def view_income(root, content_box, logic):
         desc = description_input.get("1.0", "end-1c")
 
         # Checks if all fields are not empty
-        if not amount or not category or not desc:
+        if not amount or not category:
             tk.messagebox.showwarning("Error", "All Fields are required.")
             return
         # catches unvalid number
@@ -157,7 +157,7 @@ def view_income(root, content_box, logic):
         top_row.pack(fill="x", padx=10, pady=(10, 5))
 
         # category
-        c_label = tk.Label(top_row, text=category.upper(), font=("Calibri", 9, "bold"), fg="#10B981", bg=COLOR_CARD_BG)
+        c_label = tk.Label(top_row, text=category.upper(), font=("Calibri", 9, "bold"), fg="#10B948", bg=COLOR_CARD_BG)
         c_label.pack(side="left")
 
         # Remove Button

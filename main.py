@@ -72,6 +72,8 @@ def show_page(page_name):
 
     if page_name == "Dashboard":
         dashboard_view.refresh_dashboard(app_logic)
+    if page_name == "Savings":
+        savings_view.refresh_savings(app_logic)
     if page_name == "Table View":
         table_view.refresh_table(app_logic)
 

@@ -58,10 +58,10 @@ def refresh_dashboard(logic):
         value_label.pack(expand=True, side="top", pady=(10, 0))
 
     # static UI Cards
-    create_container_card(cards_frame, 0, "Current Balance", f"₱{logic.current_balance():,.2f}", COLOR_SIDEBAR_ACTIVE)
-    create_container_card(cards_frame, 1, "Total Income", f"₱{logic.total_income():,.2f}", "green")
-    create_container_card(cards_frame, 2, "Total Expenses", f"₱{logic.total_expenses():,.2f}", "#EF4444")
-    create_container_card(cards_frame, 3, "Total Saved", f"₱{logic.total_saved():,.2f}", "black")
+    create_container_card(cards_frame, 0, "Current Balance", f"₱{logic.current_balance():,.2f}", "black")
+    create_container_card(cards_frame, 1, "Total Income", f"₱{logic.total_income():,.2f}", "#10B948")
+    create_container_card(cards_frame, 2, "Total Expenses", f"₱-{logic.total_expenses():,.2f}", "#EF4444")
+    create_container_card(cards_frame, 3, "Total Saved", f"₱{logic.total_saved():,.2f}", COLOR_SIDEBAR_ACTIVE)
 
     # matplotlib static Charts
     chart_area, bars_pos = plt.subplots(figsize=(8, 4), dpi=100)
@@ -75,7 +75,7 @@ def refresh_dashboard(logic):
     amounts = [logic.total_income(), logic.total_expenses(), logic.total_saved()]
 
     # bar colors
-    bar_colors = [COLOR_SIDEBAR_ACTIVE, "#EF4444", "#10B981"]
+    bar_colors = ["#10B948", "#EF4444", COLOR_SIDEBAR_ACTIVE]
 
     # draws a bar for each category
     bars = bars_pos.bar(categories, amounts, color=bar_colors, width=0.5)
@@ -89,7 +89,11 @@ def refresh_dashboard(logic):
 
     for bar in bars:
         y_value = bar.get_height()
-        if y_value > 0:  # Only show label if there's a value
+        if y_value == logic.total_income():
+            bars_pos.text(bar.get_x() + bar.get_width()/2, y_value + 100, f'₱{y_value:,.0f}', ha='center', va='bottom', color=COLOR_SIDEBAR, fontweight='bold')
+        if y_value == logic.total_expenses():
+            bars_pos.text(bar.get_x() + bar.get_width()/2, y_value + 100, f'-₱{y_value:,.0f}', ha='center', va='bottom', color=COLOR_SIDEBAR, fontweight='bold')
+        if y_value == logic.total_saved():
             bars_pos.text(bar.get_x() + bar.get_width()/2, y_value + 100, f'₱{y_value:,.0f}', ha='center', va='bottom', color=COLOR_SIDEBAR, fontweight='bold')
 
     canvas = FigureCanvasTkAgg(chart_area, master=chart_frame)

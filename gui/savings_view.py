@@ -2,9 +2,26 @@ import tkinter as tk
 from tkinter import ttk
 from colors import *
 
+_view_savings_content_box = None
+
 def view_savings(root, content_box, logic):
+    global _view_savings_content_box
+    _view_savings_content_box = content_box
+
+    refresh_savings(logic)
+
+def refresh_savings(logic):
+    global _view_savings_content_box
+    
+    if _view_savings_content_box is None:
+        return
+
+    # Clear the content box before rebuilding
+    for widget in _view_savings_content_box.winfo_children():
+        widget.destroy()
+
     # container
-    split_container = tk.Frame(content_box, bg=COLOR_CONTENT_BG)
+    split_container = tk.Frame(_view_savings_content_box, bg=COLOR_CONTENT_BG)
     split_container.pack(fill="both", expand=True, padx=10, pady=10)
     
     split_container.grid_columnconfigure(0, weight=1, uniform="equal")
@@ -107,10 +124,6 @@ def view_savings(root, content_box, logic):
     # Pack the cancel button
     cancel_button = tk.Button(left_frame, text="Cancel", bg="#EF4444", font=("Calibri", 14, "bold"), fg="white", bd=0, padx=15, pady=8, command=reset_form)
     cancel_button.pack(fill="x", padx=20, pady=(0, 10)) 
-
-    # store reference to update balance after actions
-    global _balance_value_ref
-    _balance_value_ref = balance_value 
     cancel_button.pack_forget()  # hide (only show when edit is pressed)
 
     # right frame

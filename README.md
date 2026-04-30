@@ -21,7 +21,8 @@ Trakki is a Python-based desktop application built with Tkinter that helps you e
       Open your terminal/command prompt, navigate to the project folder, and run:
          ```bash
             pip install -r requirements.txt
-               ```
+         ```
+      or if you are on windows, simply click install_dependencies.bat
 
  3. **Set Up the AI Coach (Environment Variables)**
     * Create a new file named exactly `.env` in the main project folder.

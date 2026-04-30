@@ -25,6 +25,20 @@ def view_savings(root, content_box, logic):
         "font": ("Calibri", 14)
     }
 
+    # Total Balance Card
+    balance_card = tk.Frame(left_frame, bg=COLOR_CARD_BG, highlightbackground=COLOR_BORDER, highlightthickness=1, relief="flat")
+    balance_card.pack(fill="x", padx=20, pady=(10, 20))
+    
+    balance_label = tk.Label(balance_card, text="Current Balance", font=("Calibri", 11), bg=COLOR_CARD_BG, fg="#555555")
+    balance_label.pack(pady=(10, 0))
+    
+    def update_balance_display():
+        current_balance = logic.current_balance()
+        balance_value.config(text=f"₱{current_balance:,.2f}")
+    
+    balance_value = tk.Label(balance_card, text=f"₱{logic.current_balance():,.2f}", font=("Calibri", 18, "bold"), bg=COLOR_CARD_BG, fg=COLOR_SIDEBAR_ACTIVE)
+    balance_value.pack(pady=(0, 10))
+    
     # page title
     page_title = tk.Label(left_frame, text="Add Target Savings", font=("Calibri", 18, "bold"), bg=COLOR_CONTENT_BG)
     page_title.pack(pady=(20, 20), anchor="w", padx=20)
@@ -93,22 +107,8 @@ def view_savings(root, content_box, logic):
     # Pack the cancel button
     cancel_button = tk.Button(left_frame, text="Cancel", bg="#EF4444", font=("Calibri", 14, "bold"), fg="white", bd=0, padx=15, pady=8, command=reset_form)
     cancel_button.pack(fill="x", padx=20, pady=(0, 10)) 
-    
-    # Total Balance Card
-    balance_card = tk.Frame(left_frame, bg=COLOR_CARD_BG, highlightbackground=COLOR_BORDER, highlightthickness=1, relief="flat")
-    balance_card.pack(fill="x", padx=20, pady=(10, 20))
-    
-    balance_label = tk.Label(balance_card, text="Current Balance", font=("Calibri", 11), bg=COLOR_CARD_BG, fg="#555555")
-    balance_label.pack(pady=(10, 0))
-    
-    def update_balance_display():
-        current_balance = logic.current_balance()
-        balance_value.config(text=f"₱{current_balance:,.2f}")
-    
-    balance_value = tk.Label(balance_card, text=f"₱{logic.current_balance():,.2f}", font=("Calibri", 18, "bold"), bg=COLOR_CARD_BG, fg=COLOR_SIDEBAR_ACTIVE)
-    balance_value.pack(pady=(0, 10))
-    
-    # Store reference to update balance after actions
+
+    # store reference to update balance after actions
     global _balance_value_ref
     _balance_value_ref = balance_value 
     cancel_button.pack_forget()  # hide (only show when edit is pressed)

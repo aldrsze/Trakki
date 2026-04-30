@@ -15,7 +15,7 @@ class Expense:
             self.__date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     # Instance Methods (Getters) to safely read private data
     def get_expense_id(self): return self.__expense_id
-    def get_amount(self): return self.__amount
+    def get_amount(self): return float(self.__amount)
     def get_category(self): return self.__category
     def get_desc(self): return self.__desc
     def get_date(self): return self.__date
@@ -42,7 +42,7 @@ class Income:
             self.__date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     def get_income_id(self): return self.__income_id
-    def get_amount(self): return self.__amount
+    def get_amount(self): return float(self.__amount)
     def get_category(self): return self.__category
     def get_desc(self): return self.__desc
     def get_date(self): return self.__date
@@ -72,7 +72,7 @@ class Target:
 
     def get_target_id(self): return self.__target_id
     def get_name(self): return self.__name
-    def get_cost(self): return self.__cost
+    def get_cost(self): return float(self.__cost)
     def get_saved(self): return self.__saved
     def get_needed(self):
         needed = float(self.__cost) - self.__saved

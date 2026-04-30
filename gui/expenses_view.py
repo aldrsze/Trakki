@@ -69,54 +69,60 @@ def view_expenses(root, content_box, logic):
         desc = description_input.get("1.0", "end-1c")
 
         # Checks if all fields are not empty
-        if not amount or not category or not desc:
+        if not amount or not category:
             tk.messagebox.showwarning("Error", "All Fields are required.")
             return
         # catches unvalid number
         try:
-            amount_float = float(amount)
+            amount = float(amount)
         except ValueError:
             tk.messagebox.showwarning("Error", "Amount must be a number.")
             return
 
-        # Check if expense exceeds current balance
-        total_income = sum(i.get_amount() for i in logic.get_incomes())
-        
+        total_balance = logic.current_balance()
+
         if editing_id[0]:
-            # For edits: exclude the old expense from total to get real available balance
-            old_expense = next((e for e in logic.get_expenses() if e.get_expense_id() == editing_id[0]), None)
-            if old_expense:
-                # Calculate expenses without the one being edited
-                total_expenses_excluding_old = sum(e.get_amount() for e in logic.get_expenses() if e.get_expense_id() != editing_id[0])
-                available_balance = total_income - total_expenses_excluding_old
+            # Find the existing expense object (if any)
+            old_expense = None
+            for e in logic.get_expenses():
+                if e.get_expense_id() == editing_id[0]:
+                    old_expense = e
+                    break
+
+            # if there is an existing expense amt, it goes back to the balance
+            if old_expense is not None:
+                old_amount = float(str(old_expense.get_amount()))
+                available_balance = total_balance + old_amount
+            # if not, it returns the balance itself
             else:
-                total_expenses = sum(e.get_amount() for e in logic.get_expenses())
-                available_balance = total_income - total_expenses
-            
-            if amount_float > available_balance:
+                available_balance = total_balance
+
+            if amount > available_balance:
                 tk.messagebox.showwarning(
                     "Insufficient Balance",
-                    f"Your updated expense of ₱{amount_float:,.2f} exceeds your available balance of ₱{available_balance:,.2f}.\n\nExpense was not updated."
+                    f"Your updated expense of ₱{amount:,.2f} exceeds your available balance of ₱{available_balance:,.2f}.\n\nExpense was not updated."
                 )
+                reset_form()
                 return
-            
+            # if amount is lower than balance, it updates
             logic.update_expense(editing_id[0], amount, category, desc)
             tk.messagebox.showinfo("Success", "Update Expense Successful!")
         else:
-            # For new expenses: check against current balance
-            total_expenses = sum(e.get_amount() for e in logic.get_expenses())
-            current_balance = total_income - total_expenses
-            
-            if amount_float > current_balance:
+            # For new expenses
+            current_balance = total_balance
+
+            if amount > current_balance:
                 tk.messagebox.showwarning(
                     "Insufficient Balance",
-                    f"Your expense of ₱{amount_float:,.2f} exceeds your current balance of ₱{current_balance:,.2f}.\n\nExpense was not added."
+                    f"Your expense of ₱{amount:,.2f} exceeds your current balance of ₱{current_balance:,.2f}.\n\nExpense was not added."
                 )
+                reset_form()
                 return
-            
+
+            # if amount is lower than current_balance
             logic.add_expense(amount, category, desc)
             tk.messagebox.showinfo("Success", "Add expense Successful!")
-        
+
         refresh_cards()
         reset_form()
 

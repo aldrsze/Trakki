@@ -14,8 +14,7 @@ _chat_initialized = False
 _ai_chat = None
 _logic_ref = None
 
-# Fetch API key from .env or use temporary fallback for grading
-# The temporary key expires
+# temp key, for testing only
 GROQ_API_KEY = "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"
 
 def view_ai_chat(root, content_box, logic):
@@ -111,7 +110,7 @@ def refresh_chat(logic):
             prompts_frame,
             text=f"• {prompt}",
             font=("Calibri", 11),
-            fg="#2563EB",
+            fg=COLOR_PROMPT_LINK,
             bg=COLOR_CONTENT_BG,
             cursor="hand2",
             wraplength=280,
@@ -192,7 +191,7 @@ def refresh_chat(logic):
         button_frame,
         text="Clear",
         font=("Calibri", 11, "bold"),
-        bg="#EF4444",
+        bg=COLOR_DANGER,
         fg="white",
         padx=12,
         pady=6,
@@ -218,9 +217,9 @@ def display_messages():
             _chat_display.insert("end", f"AI:\n", "ai_header")
             _chat_display.insert("end", f"{message}\n\n", "ai_message")
     
-    _chat_display.tag_config("user_header", foreground="#3498db", font=("Calibri", 15, "bold"))
+    _chat_display.tag_config("user_header", foreground=COLOR_USER_HEADER, font=("Calibri", 15, "bold"))
     _chat_display.tag_config("user_message", foreground="black", font=("Calibri", 15))
-    _chat_display.tag_config("ai_header", foreground="#2ecc71", font=("Calibri", 15, "bold"))
+    _chat_display.tag_config("ai_header", foreground=COLOR_AI_HEADER, font=("Calibri", 15, "bold"))
     _chat_display.tag_config("ai_message", foreground="black", font=("Calibri", 15))
     
     _chat_display.config(state="disabled")

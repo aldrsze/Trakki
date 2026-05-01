@@ -34,7 +34,7 @@ def refresh_income(logic):
     # a dictionary to store the design of the input boxes
     input_style = {
         "highlightthickness": 1,
-        "highlightbackground": "#CBD5E1",
+        "highlightbackground": COLOR_HIGHLIGHT,
         "highlightcolor": COLOR_SIDEBAR_ACTIVE,
         "relief": "flat", # visual style of the border
         "bd": 1,
@@ -45,7 +45,7 @@ def refresh_income(logic):
     total_income_card = tk.Frame(left_frame, bg=COLOR_CARD_BG, highlightbackground=COLOR_BORDER, highlightthickness=1, relief="flat")
     total_income_card.pack(fill="x", padx=20, pady=(10, 20))
     
-    balance_label = tk.Label(total_income_card, text="Total Income", font=("Calibri", 11), bg=COLOR_CARD_BG, fg="#555555")
+    balance_label = tk.Label(total_income_card, text="Total Income", font=("Calibri", 11), bg=COLOR_CARD_BG, fg=COLOR_MUTED)
     balance_label.pack(pady=(10, 0))
     
     balance_value = tk.Label(total_income_card, text=f"₱{logic.total_income():,.2f}", font=("Calibri", 18, "bold"), bg=COLOR_CARD_BG, fg=COLOR_SIDEBAR_ACTIVE)
@@ -123,7 +123,7 @@ def refresh_income(logic):
     submit_button.pack(fill="x", padx=20, pady=(10, 5)) 
 
     # Pack the cancel button
-    cancel_button = tk.Button(left_frame, text="Cancel", bg="#EF4444", font=("Calibri", 14, "bold"), fg="white", bd=0, padx=15, pady=8, command=reset_form)
+    cancel_button = tk.Button(left_frame, text="Cancel", bg=COLOR_DANGER, font=("Calibri", 14, "bold"), fg="white", bd=0, padx=15, pady=8, command=reset_form)
     cancel_button.pack(fill="x", padx=20, pady=(0, 10)) 
     cancel_button.pack_forget()  # hide (only show when edit is pressed)
 
@@ -186,25 +186,25 @@ def refresh_income(logic):
         top_row.pack(fill="x", padx=10, pady=(10, 5))
 
         # category
-        c_label = tk.Label(top_row, text=category.upper(), font=("Calibri", 9, "bold"), fg="#10B948", bg=COLOR_CARD_BG)
+        c_label = tk.Label(top_row, text=category.upper(), font=("Calibri", 9, "bold"), fg=COLOR_SUCCESS, bg=COLOR_CARD_BG)
         c_label.pack(side="left")
 
         # Remove Button
-        t_button = tk.Button(top_row, text="Remove", font=("Calibri", 10), fg="#EF4444", bg=COLOR_CARD_BG, bd=0, cursor="hand2", command=lambda: handle_card_action("remove", income_id))
+        t_button = tk.Button(top_row, text="Remove", font=("Calibri", 10), fg=COLOR_DANGER, bg=COLOR_CARD_BG, bd=0, cursor="hand2", command=lambda: handle_card_action("remove", income_id))
         t_button.pack(side="right")
 
         # Edit button
-        e_button = tk.Button(top_row, text="Edit", font=("Calibri", 10), fg="#64748B", bg=COLOR_CARD_BG, bd=0, cursor="hand2", command=lambda: handle_card_action("edit", income_id))
+        e_button = tk.Button(top_row, text="Edit", font=("Calibri", 10), fg=COLOR_EDIT, bg=COLOR_CARD_BG, bd=0, cursor="hand2", command=lambda: handle_card_action("edit", income_id))
         e_button.pack(side="right", padx=5)
 
         # Card Details
         amount_details = tk.Label(card, text=f"₱{float(str(amount)):,.2f}", font=("Calibri", 20, "bold"), fg="black", bg=COLOR_CARD_BG)
         amount_details.pack(anchor="w", padx=10)
 
-        desc_details = tk.Label(card, text=desc, font=("Calibri", 12), fg="#333333", bg=COLOR_CARD_BG, justify="left", wraplength=200)
+        desc_details = tk.Label(card, text=desc, font=("Calibri", 12), fg=COLOR_TEXT, bg=COLOR_CARD_BG, justify="left", wraplength=200)
         desc_details.pack(anchor="w", padx=10, pady=(5, 0))
 
-        date_details = tk.Label(card, text=date, font=("Calibri", 10), fg="#888888", bg=COLOR_CARD_BG)
+        date_details = tk.Label(card, text=date, font=("Calibri", 10), fg=COLOR_SUBTEXT, bg=COLOR_CARD_BG)
         date_details.pack(anchor="w", padx=10, pady=(10, 15))
 
     def refresh_cards():

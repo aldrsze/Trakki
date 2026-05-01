@@ -22,7 +22,7 @@ Trakki is a Python-based desktop application built with Tkinter that helps you e
          ```bash
             pip install -r requirements.txt
          ```
-      or if you are on windows, simply click install_dependencies.bat
+      or if you are on windows/mac/linux, simply click install_dependencies.bat/install_dependencies.sh
 
  3. **Run the Application**
     ```bash

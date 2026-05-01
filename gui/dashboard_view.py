@@ -52,15 +52,15 @@ def refresh_dashboard(logic):
         parent.grid_columnconfigure(col, weight=1)
 
         # label
-        container_label = tk.Label(card, text=title, font=("Calibri", 11), bg=COLOR_CARD_BG, fg="#555555")
+        container_label = tk.Label(card, text=title, font=("Calibri", 11), bg=COLOR_CARD_BG, fg=COLOR_MUTED)
         container_label.pack(expand=True, side="bottom", pady=(0, 10))
         value_label = tk.Label(card, text=text_val, font=("Calibri", 18, "bold"), bg=COLOR_CARD_BG, fg=value_color)
         value_label.pack(expand=True, side="top", pady=(10, 0))
 
     # static UI Cards
     create_container_card(cards_frame, 0, "Current Balance", f"₱{logic.current_balance():,.2f}", "black")
-    create_container_card(cards_frame, 1, "Total Income", f"₱{logic.total_income():,.2f}", "#10B948")
-    create_container_card(cards_frame, 2, "Total Expenses", f"₱-{logic.total_expenses():,.2f}", "#EF4444")
+    create_container_card(cards_frame, 1, "Total Income", f"₱{logic.total_income():,.2f}", COLOR_SUCCESS)
+    create_container_card(cards_frame, 2, "Total Expenses", f"₱-{logic.total_expenses():,.2f}", COLOR_DANGER)
     create_container_card(cards_frame, 3, "Total Saved", f"₱{logic.total_saved():,.2f}", COLOR_SIDEBAR_ACTIVE)
 
     # matplotlib static Charts
@@ -75,7 +75,7 @@ def refresh_dashboard(logic):
     amounts = [logic.total_income(), logic.total_expenses(), logic.total_saved()]
 
     # bar colors
-    bar_colors = ["#10B948", "#EF4444", COLOR_SIDEBAR_ACTIVE]
+    bar_colors = [COLOR_SUCCESS, COLOR_DANGER, COLOR_SIDEBAR_ACTIVE]
 
     # draws a bar for each category
     bars = bars_pos.bar(categories, amounts, color=bar_colors, width=0.5)
@@ -84,7 +84,7 @@ def refresh_dashboard(logic):
     bars_pos.spines['right'].set_visible(False) # remove right border
     bars_pos.spines['left'].set_color(COLOR_BORDER)
     bars_pos.spines['bottom'].set_color(COLOR_BORDER)
-    bars_pos.tick_params(colors="#64748B") # color of side nums
+    bars_pos.tick_params(colors=COLOR_EDIT) # color of side nums
     bars_pos.set_title('Cash Flow Overview', color=COLOR_SIDEBAR, pad=20, fontsize=14, fontweight='bold')
 
     for bar in bars:

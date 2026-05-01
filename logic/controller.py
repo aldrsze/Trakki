@@ -2,29 +2,29 @@ from logic.models import Expense, Income, Target, SavingsTransaction
 
 class TrakkiLogic:
     SAMPLE_INCOMES = [
-        (4500.00, "Primary Salary", "Monthly base pay from employer", "2026-04-01 09:00:00"),
-        (850.00, "Side Hustle", "E-commerce store monthly profit", "2026-04-10 14:30:00"),
-        (1000.00, "Real Estate", "Rental property income", "2026-04-15 10:00:00"),
-        (120.00, "Investments", "Quarterly dividend payouts", "2026-04-20 11:15:00"),
+        (8000.00, "Parental Allowance", "Monthly support from parents", "2026-04-01 09:00:00"),
+        (2500.00, "Part-time Tutoring", "Tutoring underclassmen (weekly sessions)", "2026-04-10 14:30:00"),
+        (1500.00, "Scholarship Stipend", "Monthly academic scholarship award", "2026-04-15 10:00:00"),
+        (800.00, "Freelance Gigs", "Occasional freelance/contract work", "2026-04-20 11:15:00"),
     ]
 
     SAMPLE_EXPENSES = [
-        (1500.00, "Housing", "Monthly rent/mortgage payment", "2026-04-02 08:00:00"),
-        (400.00, "Groceries", "Weekly supermarket runs", "2026-04-05 18:45:00"),
-        (200.00, "Utilities", "Electricity, Water, and Fiber Internet", "2026-04-08 09:30:00"),
-        (350.00, "Transportation", "Car loan and gas", "2026-04-12 17:20:00"),
-        (150.00, "Dining Out", "Weekend restaurants and cafes", "2026-04-16 20:00:00"),
-        (50.00, "Health", "Monthly Gym Membership", "2026-04-18 07:00:00"),
-        (45.00, "Subscriptions", "Netflix, Spotify, and Cloud Storage", "2026-04-21 10:00:00"),
-        (120.00, "Personal", "Clothing and personal care", "2026-04-25 15:30:00"),
+        (15000.00, "Tuition Installment", "Semester tuition payment (partial)", "2026-04-02 08:00:00"),
+        (4000.00, "Dorm Rent", "Shared dorm room rent for the month", "2026-04-05 18:45:00"),
+        (3000.00, "Food & Groceries", "Weekly meals, groceries and campus canteen", "2026-04-08 09:30:00"),
+        (1200.00, "Books & Supplies", "Textbooks, notebooks, printing", "2026-04-12 17:20:00"),
+        (800.00, "Transport", "Commuter fare & occasional ride-hailing", "2026-04-16 20:00:00"),
+        (400.00, "Internet & Phone", "Mobile data and dorm Wi-Fi portion", "2026-04-18 07:00:00"),
+        (300.00, "Coffee & Snacks", "Cafeteria and study snacks", "2026-04-21 10:00:00"),
+        (250.00, "Subscriptions", "Study tools and entertainment subscriptions", "2026-04-25 15:30:00"),
     ]
 
     SAMPLE_TARGETS = [
-        ("Japan Trip 2027", 4000.00, "2027-11-10 00:00:00", 500.00, "2026-04-03 12:00:00"),
-        ("House Down Payment", 30000.00, "2030-01-01 00:00:00", 1000.00, "2026-04-07 10:00:00"),
-        ("New Smartphone", 1000.00, "2026-08-15 00:00:00", 450.00, "2026-04-14 16:00:00"),
-        ("6-Month Emergency Fund", 12000.00, "2026-12-31 00:00:00", 800.00, "2026-04-19 09:00:00"),
-        ("Christmas Gifts", 500.00, "2026-12-01 00:00:00", 100.00, "2026-04-26 14:00:00"),
+        ("Laptop (School Work)", 35000.00, "2026-09-01 00:00:00", 8000.00, "2026-03-20 12:00:00"),
+        ("Emergency Fund (3 months)", 12000.00, "2026-12-31 00:00:00", 2000.00, "2026-03-25 10:00:00"),
+        ("Thesis Printing & Binding", 2000.00, "2026-06-15 00:00:00", 150.00, "2026-04-01 16:00:00"),
+        ("Graduation Trip", 15000.00, "2027-04-01 00:00:00", 1200.00, "2026-04-05 09:00:00"),
+        ("Conference / Workshop", 8000.00, "2026-11-01 00:00:00", 500.00, "2026-04-12 14:00:00"),
     ]
 
     def __init__(self):
@@ -33,6 +33,8 @@ class TrakkiLogic:
         self.__incomes = []
         self.__savings = []
         self.__savings_transactions = []
+
+        # for tracking the id of the models
         self.__next_income_id = 1
         self.__next_expense_id = 1
         self.__next_target_id = 1

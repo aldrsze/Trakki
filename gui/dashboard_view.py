@@ -14,14 +14,11 @@ def view_dashboard(root, content_box, logic):
     global _dashboard_content_box
     _dashboard_content_box = content_box
     
-    # Initial render
+    # refresh each time view_dashboard is called
     refresh_dashboard(logic)
 
 def refresh_dashboard(logic):
     global _dashboard_content_box
-
-    if _dashboard_content_box is None:
-        return
 
     # Clear the content box before rebuilding
     for widget in _dashboard_content_box.winfo_children():
@@ -60,8 +57,8 @@ def refresh_dashboard(logic):
     # static UI Cards
     create_container_card(cards_frame, 0, "Current Balance", f"₱{logic.current_balance():,.2f}", "black")
     create_container_card(cards_frame, 1, "Total Income", f"₱{logic.total_income():,.2f}", COLOR_SUCCESS)
-    create_container_card(cards_frame, 2, "Total Expenses", f"₱-{logic.total_expenses():,.2f}", COLOR_DANGER)
-    create_container_card(cards_frame, 3, "Total Saved", f"₱{logic.total_saved():,.2f}", COLOR_SIDEBAR_ACTIVE)
+    create_container_card(cards_frame, 2, "Total Expenses", f"-₱{logic.total_expenses():,.2f}", COLOR_DANGER)
+    create_container_card(cards_frame, 3, "Total Savings", f"₱{logic.total_saved():,.2f}", COLOR_SIDEBAR_ACTIVE)
 
     # matplotlib static Charts
     chart_area, bars_pos = plt.subplots(figsize=(8, 4), dpi=100)
@@ -69,7 +66,7 @@ def refresh_dashboard(logic):
     bars_pos.set_facecolor(COLOR_CONTENT_BG)
 
     # categories list
-    categories = ['Income', 'Expenses', 'Target Savings']
+    categories = ['Income', 'Expenses', 'Savings']
 
     # amounts list (with logic data)
     amounts = [logic.total_income(), logic.total_expenses(), logic.total_saved()]

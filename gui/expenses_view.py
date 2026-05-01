@@ -44,17 +44,29 @@ def refresh_expense(logic):
 
     # Total Expenses Card
     total_expenses_card = tk.Frame(left_frame, bg=COLOR_CARD_BG, highlightbackground=COLOR_BORDER, highlightthickness=1, relief="flat")
-    total_expenses_card.pack(fill="x", padx=20, pady=(10, 20))
+    total_expenses_card.pack(fill="x", padx=20, pady=2)
     
     balance_label = tk.Label(total_expenses_card, text="Total Expenses", font=("Calibri", 11), bg=COLOR_CARD_BG, fg=COLOR_MUTED)
     balance_label.pack(pady=(10, 0))
     
-    balance_value = tk.Label(total_expenses_card, text=f"₱{logic.total_expenses():,.2f}", font=("Calibri", 18, "bold"), bg=COLOR_CARD_BG, fg=COLOR_SIDEBAR_ACTIVE)
+    expense_value = tk.Label(total_expenses_card, text=f"-₱{logic.total_expenses():,.2f}", font=("Calibri", 18, "bold"), bg=COLOR_CARD_BG, fg=COLOR_DANGER)
+    expense_value.pack(pady=(0, 10))
+
+    # Total Balance Card
+    total_balance_card = tk.Frame(left_frame, bg=COLOR_CARD_BG, highlightbackground=COLOR_BORDER, highlightthickness=1, relief="flat")
+    total_balance_card.pack(fill="x", padx=20, pady=2)
+    
+    balance_label = tk.Label(total_balance_card, text="Total Balance", font=("Calibri", 11), bg=COLOR_CARD_BG, fg=COLOR_MUTED)
+    balance_label.pack(pady=(10, 0))
+    
+    balance_value = tk.Label(total_balance_card, text=f"₱{logic.current_balance():,.2f}", font=("Calibri", 18, "bold"), bg=COLOR_CARD_BG, fg=COLOR_SIDEBAR_ACTIVE)
     balance_value.pack(pady=(0, 10))
 
     def update_expenses_display():
         total_expenses = logic.total_expenses()
-        balance_value.config(text=f"₱{total_expenses:,.2f}")
+        current_balance = logic.current_balance()
+        expense_value.config(text=f"-₱{total_expenses:,.2f}")
+        balance_value.config(text=f"₱{current_balance:,.2f}")
 
     # page title
     page_title = tk.Label(left_frame, text="Add New Expense", font=("Calibri", 18, "bold"), bg=COLOR_CONTENT_BG)

@@ -1,9 +1,5 @@
 import tkinter as tk
-import os
-from dotenv import load_dotenv
 from colors import *
-
-load_dotenv()
 
 # Global reference to store the content box for refreshing
 _chat_content_box = None
@@ -17,6 +13,7 @@ _logic_ref = None
 # temp key, for testing only
 GROQ_API_KEY = "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"
 
+# view ai chat
 def view_ai_chat(root, content_box, logic):
     global _chat_content_box, _chat_initialized, _ai_chat, _logic_ref
     _chat_content_box = content_box
@@ -33,6 +30,7 @@ def view_ai_chat(root, content_box, logic):
             refresh_chat(logic)
     else:
         if _ai_chat:
+            # for storing the history of conversation
             _ai_chat.conversation_history = []
 
 def refresh_chat(logic):

@@ -1,11 +1,3 @@
-import sys
-import os
-
-# Add lib directory to Python path for local packages
-lib_path = os.path.join(os.path.dirname(__file__), 'lib')
-if lib_path not in sys.path:
-    sys.path.insert(0, lib_path)
-
 import tkinter as tk
 from PIL import Image, ImageTk
 from colors import *
@@ -14,7 +6,7 @@ from gui import income_view
 from gui import expenses_view
 from gui import savings_view
 from gui import dashboard_view
-from gui import table_view
+from gui import transaction_view
 from gui import ai_chat_view
 
 from logic.controller import TrakkiLogic
@@ -23,7 +15,7 @@ app_logic = TrakkiLogic()
 
 # root window
 root = tk.Tk()
-root.title("Trakki")
+root.title("Trakki") # title
 root.geometry("1200x700") # dimensions
 root.state('zoomed')
 root.resizable(False, False) # non-resizable
@@ -61,17 +53,17 @@ def show_page(page_name):
         else:
             nav_buttons[name].configure(bg=COLOR_SIDEBAR)
 
+    # handles the refreshing of the pages per click
     if page_name == "Dashboard":
         dashboard_view.refresh_dashboard(app_logic)
     if page_name == "Savings":
         savings_view.refresh_savings(app_logic)
     if page_name == "Table View":
-        table_view.refresh_table(app_logic)
+        transaction_view.refresh_table(app_logic)
     if page_name == "Income":
         income_view.refresh_income(app_logic)
     if page_name == "Expenses":
         expenses_view.refresh_expense(app_logic)
-    
 
     # Bring the selected page's frame to the front
     page_to_open = pages[page_name]
@@ -82,7 +74,7 @@ nav_items = [
     ("Income", income_view.view_income),
     ("Expenses", expenses_view.view_expenses),
     ("Savings", savings_view.view_savings),
-    ("Table View", table_view.view_table),
+    ("Transactions", transaction_view.view_transaction),
     ("AI Chat", ai_chat_view.view_ai_chat)
 ]
 
@@ -115,7 +107,7 @@ new_width = 140
 logo_aspect_ratio = original_logo.height / original_logo.width
 new_height = int(new_width * logo_aspect_ratio)
 
-# convert it into a TK image
+# convert it into a TK image = readable by tkinter
 resized_logo = original_logo.resize((new_width, new_height))
 logo_img = ImageTk.PhotoImage(resized_logo)
 

@@ -6,7 +6,7 @@ from colors import *
 # Global reference to store the content box for refreshing
 _table_content_box = None
 
-def view_table(root, content_box, logic):
+def view_transaction(root, content_box, logic):
     global _table_content_box
     _table_content_box = content_box
 
@@ -113,7 +113,7 @@ def refresh_table(logic):
             my_data_list.append(("Expense", e.get_category(), e.get_desc(), e.get_amount(), e.get_date()))
             
         for transaction in logic.get_savings_transactions():
-            my_data_list.append(("Target Savings", transaction.get_target_name(), "Savings Deposit", transaction.get_amount(), transaction.get_date()))
+            my_data_list.append(("Savings", transaction.get_target_name(), "Savings Deposit", transaction.get_amount(), transaction.get_date()))
 
         # Sort based on date and time (newly added on top)
         my_data_list.sort(key=lambda x: parse_date(x[4]), reverse=True)
@@ -126,7 +126,7 @@ def refresh_table(logic):
             money = float(item[3])
             date = item[4]
             
-            if type_of_record == "Expense" or type_of_record == "Target Savings":
+            if type_of_record == "Expense" or type_of_record == "Savings":
                 sign = "-"
             else:
                 sign = ""

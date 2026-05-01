@@ -2,29 +2,31 @@ from logic.models import Expense, Income, Target, SavingsTransaction
 
 class TrakkiLogic:
     SAMPLE_INCOMES = [
-        (8000.00, "Parental Allowance", "Monthly support from parents", "2026-04-01 09:00:00"),
-        (2500.00, "Part-time Tutoring", "Tutoring underclassmen (weekly sessions)", "2026-04-10 14:30:00"),
-        (1500.00, "Scholarship Stipend", "Monthly academic scholarship award", "2026-04-15 10:00:00"),
-        (800.00, "Freelance Gigs", "Occasional freelance/contract work", "2026-04-20 11:15:00"),
+        (12000.00, "Monthly Allowance", "Living expense allowance from parents", "2026-04-01 09:00:00"),
+        (3500.00, "Student Assistant Pay", "Salary for library/department assistant duties", "2026-04-10 14:30:00"),
+        (2000.00, "Scholarship Stipend", "Monthly university/government scholarship award", "2026-04-15 10:00:00"),
+        (1500.00, "Side Hustles", "Selling old clothes online & minor academic commissions", "2026-04-20 11:15:00"),
     ]
+    # Total Monthly Income: 19,000.00
 
     SAMPLE_EXPENSES = [
-        (15000.00, "Tuition Installment", "Semester tuition payment (partial)", "2026-04-02 08:00:00"),
-        (4000.00, "Dorm Rent", "Shared dorm room rent for the month", "2026-04-05 18:45:00"),
-        (3000.00, "Food & Groceries", "Weekly meals, groceries and campus canteen", "2026-04-08 09:30:00"),
-        (1200.00, "Books & Supplies", "Textbooks, notebooks, printing", "2026-04-12 17:20:00"),
-        (800.00, "Transport", "Commuter fare & occasional ride-hailing", "2026-04-16 20:00:00"),
-        (400.00, "Internet & Phone", "Mobile data and dorm Wi-Fi portion", "2026-04-18 07:00:00"),
-        (300.00, "Coffee & Snacks", "Cafeteria and study snacks", "2026-04-21 10:00:00"),
-        (250.00, "Subscriptions", "Study tools and entertainment subscriptions", "2026-04-25 15:30:00"),
+        (4000.00, "Dorm Rent", "Shared boarding house / dorm room rent", "2026-04-05 18:45:00"),
+        (5000.00, "Food & Groceries", "Campus meals, instant noodles, and convenience store runs", "2026-04-08 09:30:00"),
+        (1000.00, "School Supplies", "Photocopying thick readings, index cards, and yellow pads", "2026-04-12 17:20:00"),
+        (1200.00, "Transportation", "Daily commute & the occasional ride-hailing app when late", "2026-04-16 20:00:00"),
+        (400.00, "Mobile Data", "Prepaid load promos for outdoor classes and group chats", "2026-04-18 07:00:00"),
+        (600.00, "Caffeine & Snacks", "Iced coffee and energy drinks for finals week prep", "2026-04-21 10:00:00"),
+        (250.00, "Subscriptions", "Spotify Premium Student & shared streaming account", "2026-04-25 15:30:00"),
+        (250.00, "Org Expenses", "University organization shirt and event contributions", "2026-04-28 12:00:00"),
     ]
+    # Total Monthly Expenses: 12,700.00
+    # Remaining Cash Flow for Savings: 6,300.00
 
     SAMPLE_TARGETS = [
-        ("Laptop (School Work)", 35000.00, "2026-09-01 00:00:00", 8000.00, "2026-03-20 12:00:00"),
-        ("Emergency Fund (3 months)", 12000.00, "2026-12-31 00:00:00", 2000.00, "2026-03-25 10:00:00"),
-        ("Thesis Printing & Binding", 2000.00, "2026-06-15 00:00:00", 150.00, "2026-04-01 16:00:00"),
-        ("Graduation Trip", 15000.00, "2027-04-01 00:00:00", 1200.00, "2026-04-05 09:00:00"),
-        ("Conference / Workshop", 8000.00, "2026-11-01 00:00:00", 500.00, "2026-04-12 14:00:00"),
+        ("Midterm Tuition Fund", 15000.00, "2026-05-15 00:00:00", 1000.00, "2026-04-02 08:00:00"),
+        ("New Laptop Fund", 35000.00, "2026-09-01 00:00:00", 500.00, "2026-03-20 12:00:00"),
+        ("Emergency Fund", 5000.00, "2026-12-31 00:00:00", 100.00, "2026-03-25 10:00:00"),
+        ("Thesis & Defense Fees", 3000.00, "2026-06-15 00:00:00", 200.00, "2026-04-01 16:00:00")
     ]
 
     def __init__(self):

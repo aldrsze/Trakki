@@ -112,8 +112,8 @@ def refresh_table(logic):
         for e in logic.get_expenses():
             my_data_list.append(("Expense", e.get_category(), e.get_desc(), e.get_amount(), e.get_date()))
             
-        for s in logic.get_savings():
-            my_data_list.append(("Target Savings", s.get_name(), "Savings Goal", s.get_cost(), s.get_created_at()))
+        for transaction in logic.get_savings_transactions():
+            my_data_list.append(("Target Savings", transaction.get_target_name(), "Savings Deposit", transaction.get_amount(), transaction.get_date()))
 
         # Sort based on date and time (newly added on top)
         my_data_list.sort(key=lambda x: parse_date(x[4]), reverse=True)
@@ -126,7 +126,11 @@ def refresh_table(logic):
             money = float(item[3])
             date = item[4]
             
-            money_string = "₱" + "{:,.2f}".format(money)
+            if type_of_record == "Expense" or type_of_record == "Target Savings":
+                sign = "-"
+            else:
+                sign = ""
+            money_string = sign + "₱" + "{:,.2f}".format(money)
             
             # Put the row in the table
             tree.insert("", "end", values=(type_of_record, name, description, money_string, date))

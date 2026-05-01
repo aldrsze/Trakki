@@ -1,5 +1,8 @@
 from datetime import datetime
 
+# this is where the concept of oop goes
+
+# Expense obj that has its own attributes
 class Expense:
     def __init__(self, expense_id, amount, category, desc, date_string=None):
         # Encapsulation
@@ -8,11 +11,12 @@ class Expense:
         self.__category = category
         self.__desc = desc
 
-        # If a custom date is provided, use it. Otherwise, use right now.
+        # if custom date, otherwise use now
         if date_string:
             self.__date = date_string
         else:
             self.__date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
     # Instance Methods (Getters) to safely read private data
     def get_expense_id(self): return self.__expense_id
     def get_amount(self): return float(self.__amount)
@@ -35,7 +39,7 @@ class Income:
         self.__amount = amount
         self.__category = category
         self.__desc = desc
-        # If a custom date is provided, use it. Otherwise, use right now.
+        # if custom date, otherwise use now
         if date_string:
             self.__date = date_string
         else:
@@ -95,3 +99,23 @@ class Target:
 
     def set_saved(self, saved):
         self.__saved = float(saved)
+
+# object for savings transac such as fundings to save a record
+class SavingsTransaction:
+    def __init__(self, transaction_id, target_id, target_name, amount, date_string=None):
+        self.__transaction_id = transaction_id
+        self.__target_id = target_id
+        self.__target_name = target_name
+        self.__amount = float(amount)
+
+        # if custom date, otherwise use now
+        if date_string:
+            self.__date = date_string
+        else:
+            self.__date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    def get_transaction_id(self): return self.__transaction_id
+    def get_target_id(self): return self.__target_id
+    def get_target_name(self): return self.__target_name
+    def get_amount(self): return float(self.__amount)
+    def get_date(self): return self.__date

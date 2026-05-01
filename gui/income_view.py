@@ -2,9 +2,24 @@ import tkinter as tk
 from tkinter import ttk
 from colors import *
 
+_view_income_content_box = None
 def view_income(root, content_box, logic):
+    global _view_income_content_box
+    _view_income_content_box = content_box
+
+    refresh_income(logic)
+
+def refresh_income(logic):
+    global _view_income_content_box
+
+    if _view_income_content_box is None:
+        return
+    
+    for widget in _view_income_content_box.winfo_children():
+        widget.destroy()
+
     # container
-    split_container = tk.Frame(content_box, bg=COLOR_CONTENT_BG)
+    split_container = tk.Frame(_view_income_content_box, bg=COLOR_CONTENT_BG)
     split_container.pack(fill="both", expand=True, padx=10, pady=10)
 
     # divide the container into two (column 0 and 1)
@@ -25,6 +40,20 @@ def view_income(root, content_box, logic):
         "bd": 1,
         "font": ("Calibri", 14)
     }
+
+    # Total Income Card
+    total_income_card = tk.Frame(left_frame, bg=COLOR_CARD_BG, highlightbackground=COLOR_BORDER, highlightthickness=1, relief="flat")
+    total_income_card.pack(fill="x", padx=20, pady=(10, 20))
+    
+    balance_label = tk.Label(total_income_card, text="Total Income", font=("Calibri", 11), bg=COLOR_CARD_BG, fg="#555555")
+    balance_label.pack(pady=(10, 0))
+    
+    balance_value = tk.Label(total_income_card, text=f"₱{logic.total_income():,.2f}", font=("Calibri", 18, "bold"), bg=COLOR_CARD_BG, fg=COLOR_SIDEBAR_ACTIVE)
+    balance_value.pack(pady=(0, 10))
+
+    def update_income_display():
+        total_income = logic.total_income()
+        balance_value.config(text=f"₱{total_income:,.2f}")
 
     # page title
     page_title = tk.Label(left_frame, text="Add New Income", font=("Calibri", 18, "bold"), bg=COLOR_CONTENT_BG)
@@ -182,6 +211,8 @@ def view_income(root, content_box, logic):
         # Clear all existing income cards
         for existing_card_widget in income_grid.winfo_children():
             existing_card_widget.destroy()
+
+        update_income_display()
 
         # get all the incomes data
         current_incomes_list = logic.get_incomes()

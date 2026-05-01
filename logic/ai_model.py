@@ -143,7 +143,7 @@ STRICT CONSTRAINTS:
                 "model": "llama-3.1-8b-instant",  # Free model
                 "messages": messages,
                 "temperature": 0.7,
-                "max_tokens": 1024,
+                "max_tokens": 512,
             }
             
             response = requests.post(self.api_url, json=payload, headers=headers, timeout=15)

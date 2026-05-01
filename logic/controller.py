@@ -1,40 +1,44 @@
-from logic.models import Expense, Income, Target
+from logic.models import Expense, Income, Target, SavingsTransaction
 
 class TrakkiLogic:
+    SAMPLE_INCOMES = [
+        (4500.00, "Primary Salary", "Monthly base pay from employer", "2026-04-01 09:00:00"),
+        (850.00, "Side Hustle", "E-commerce store monthly profit", "2026-04-10 14:30:00"),
+        (1000.00, "Real Estate", "Rental property income", "2026-04-15 10:00:00"),
+        (120.00, "Investments", "Quarterly dividend payouts", "2026-04-20 11:15:00"),
+    ]
+
+    SAMPLE_EXPENSES = [
+        (1500.00, "Housing", "Monthly rent/mortgage payment", "2026-04-02 08:00:00"),
+        (400.00, "Groceries", "Weekly supermarket runs", "2026-04-05 18:45:00"),
+        (200.00, "Utilities", "Electricity, Water, and Fiber Internet", "2026-04-08 09:30:00"),
+        (350.00, "Transportation", "Car loan and gas", "2026-04-12 17:20:00"),
+        (150.00, "Dining Out", "Weekend restaurants and cafes", "2026-04-16 20:00:00"),
+        (50.00, "Health", "Monthly Gym Membership", "2026-04-18 07:00:00"),
+        (45.00, "Subscriptions", "Netflix, Spotify, and Cloud Storage", "2026-04-21 10:00:00"),
+        (120.00, "Personal", "Clothing and personal care", "2026-04-25 15:30:00"),
+    ]
+
+    SAMPLE_TARGETS = [
+        ("Japan Trip 2027", 4000.00, "2027-11-10 00:00:00", 500.00, "2026-04-03 12:00:00"),
+        ("House Down Payment", 30000.00, "2030-01-01 00:00:00", 1000.00, "2026-04-07 10:00:00"),
+        ("New Smartphone", 1000.00, "2026-08-15 00:00:00", 450.00, "2026-04-14 16:00:00"),
+        ("6-Month Emergency Fund", 12000.00, "2026-12-31 00:00:00", 800.00, "2026-04-19 09:00:00"),
+        ("Christmas Gifts", 500.00, "2026-12-01 00:00:00", 100.00, "2026-04-26 14:00:00"),
+    ]
+
     def __init__(self):
         # Encapsulation
         self.__expenses = []
         self.__incomes = []
         self.__savings = []
+        self.__savings_transactions = []
         self.__next_income_id = 1
         self.__next_expense_id = 1
         self.__next_target_id = 1
+        self.__next_savings_transaction_id = 1
 
-        # Sample Income Data 
-        # Format: amount, category, desc, created_at
-        self.add_income(4500.00, "Primary Salary", "Monthly base pay from employer", "2026-04-01 09:00:00")
-        self.add_income(850.00, "Side Hustle", "E-commerce store monthly profit", "2026-04-10 14:30:00")
-        self.add_income(1000.00, "Real Estate", "Rental property income", "2026-04-15 10:00:00")
-        self.add_income(120.00, "Investments", "Quarterly dividend payouts", "2026-04-20 11:15:00")
-
-        # Sample Expense Data 
-        # Format: amount, category, desc, created_at
-        self.add_expense(1500.00, "Housing", "Monthly rent/mortgage payment", "2026-04-02 08:00:00")
-        self.add_expense(400.00, "Groceries", "Weekly supermarket runs", "2026-04-05 18:45:00")
-        self.add_expense(200.00, "Utilities", "Electricity, Water, and Fiber Internet", "2026-04-08 09:30:00")
-        self.add_expense(350.00, "Transportation", "Car loan and gas", "2026-04-12 17:20:00")
-        self.add_expense(150.00, "Dining Out", "Weekend restaurants and cafes", "2026-04-16 20:00:00")
-        self.add_expense(50.00, "Health", "Monthly Gym Membership", "2026-04-18 07:00:00")
-        self.add_expense(45.00, "Subscriptions", "Netflix, Spotify, and Cloud Storage", "2026-04-21 10:00:00")
-        self.add_expense(120.00, "Personal", "Clothing and personal care", "2026-04-25 15:30:00")
-
-        # Sample Target Data (Savings Goals)
-        # Format: name, cost, goal_date, saved_amount, created_at
-        self.add_target("Japan Trip 2027", 4000.00, "2027-11-10 00:00:00", 500.00, "2026-04-03 12:00:00")
-        self.add_target("House Down Payment", 30000.00, "2030-01-01 00:00:00", 1000.00, "2026-04-07 10:00:00")
-        self.add_target("New Smartphone", 1000.00, "2026-08-15 00:00:00", 450.00, "2026-04-14 16:00:00")
-        self.add_target("6-Month Emergency Fund", 12000.00, "2026-12-31 00:00:00", 800.00, "2026-04-19 09:00:00")
-        self.add_target("Christmas Gifts", 500.00, "2026-12-01 00:00:00", 100.00, "2026-04-26 14:00:00")
+        self._load_sample_data()
 
     # Instance Methods to retrieve the encapsulated lists
     def get_expenses(self): 
@@ -45,6 +49,31 @@ class TrakkiLogic:
     
     def get_savings(self): 
         return self.__savings
+
+    def get_savings_transactions(self):
+        return self.__savings_transactions
+
+    def _load_sample_data(self):
+        for amount, category, desc, date_string in self.SAMPLE_INCOMES:
+            self.add_income(amount, category, desc, date_string)
+
+        for amount, category, desc, date_string in self.SAMPLE_EXPENSES:
+            self.add_expense(amount, category, desc, date_string)
+
+        for name, cost, goal_date, saved_amount, created_at in self.SAMPLE_TARGETS:
+            self.add_target(name, cost, goal_date, saved_amount, created_at)
+
+        self._seed_savings_transactions()
+
+    def _seed_savings_transactions(self):
+        for target in self.__savings:
+            if target.get_saved() > 0:
+                self.add_savings_transaction(
+                    target.get_target_id(),
+                    target.get_name(),
+                    target.get_saved(),
+                    target.get_created_at()
+                )
 
     # Instance Methods to ADD new data using the Models
     def add_expense(self, amount, category, desc, date_string=None):
@@ -91,6 +120,17 @@ class TrakkiLogic:
         new_target = Target(self.__next_target_id, name, cost, date, saved, created_at)
         self.__savings.append(new_target)
         self.__next_target_id += 1 # increase per add
+
+    def add_savings_transaction(self, target_id, target_name, amount, date_string=None):
+        new_transaction = SavingsTransaction(
+            self.__next_savings_transaction_id,
+            target_id,
+            target_name,
+            amount,
+            date_string
+        )
+        self.__savings_transactions.append(new_transaction)
+        self.__next_savings_transaction_id += 1
 
     def update_target(self, target_id, name, cost, date):
         for target in self.__savings:

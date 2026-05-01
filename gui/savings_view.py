@@ -186,6 +186,7 @@ def refresh_savings(logic):
                         tk.messagebox.showwarning("Error", "Insufficient balance.")
                         return
                     item.set_saved(item.get_saved() + fund)
+                    logic.add_savings_transaction(item.get_target_id(), item.get_name(), fund)
                     tk.messagebox.showinfo("Success", f"Added ₱{fund:,.2f} to {item.get_name()}.")
                     refresh_cards()
                     break

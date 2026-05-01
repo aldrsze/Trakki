@@ -21,15 +21,6 @@ from logic.controller import TrakkiLogic
 
 app_logic = TrakkiLogic()
 
-for income in app_logic.get_incomes():
-    print("Income:", income.get_amount(), income.get_category(), income.get_desc())
-
-for expense in app_logic.get_expenses():
-    print("Expense:", expense.get_amount(), expense.get_category(), expense.get_desc())
-
-for target in app_logic.get_savings():
-    print("Target:", target.get_name(), target.get_cost(), target.get_date(), target.get_saved(), target)
-
 # root window
 root = tk.Tk()
 root.title("Trakki")
@@ -76,6 +67,11 @@ def show_page(page_name):
         savings_view.refresh_savings(app_logic)
     if page_name == "Table View":
         table_view.refresh_table(app_logic)
+    if page_name == "Income":
+        income_view.refresh_income(app_logic)
+    if page_name == "Expenses":
+        expenses_view.refresh_expense(app_logic)
+    
 
     # Bring the selected page's frame to the front
     page_to_open = pages[page_name]

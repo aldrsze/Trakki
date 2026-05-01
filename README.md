@@ -24,18 +24,11 @@ Trakki is a Python-based desktop application built with Tkinter that helps you e
          ```
       or if you are on windows, simply click install_dependencies.bat
 
- 3. **Set Up the AI Coach (Environment Variables)**
-    * Create a new file named exactly `.env` in the main project folder.
-    * Get a free API key from the [Groq Console](https://console.groq.com).
-    * Add your key to the `.env` file like this:
-    ```text
-    GROQ_API_KEY=your_api_key_here
-    ```
-
-4. **Run the Application**
+ 3. **Run the Application**
     ```bash
     python main.py
     ```
+    The AI Coach works out of the box. No configuration needed.
 
 ## Tech Stack
 * **GUI Framework:** Tkinter

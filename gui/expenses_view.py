@@ -2,9 +2,25 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from colors import *
 
+_view_expenses_content_box = None
+
 def view_expenses(root, content_box, logic):
+    global _view_expenses_content_box
+    _view_expenses_content_box = content_box
+
+    refresh_expense(logic)
+
+def refresh_expense(logic):
+    global _view_expenses_content_box
+
+    if _view_expenses_content_box is None:
+        return
+    
+    for widget in _view_expenses_content_box.winfo_children():
+        widget.destroy()
+
     # container
-    split_container = tk.Frame(content_box, bg=COLOR_CONTENT_BG)
+    split_container = tk.Frame(_view_expenses_content_box, bg=COLOR_CONTENT_BG)
     split_container.pack(fill="both", expand=True, padx=10, pady=10)
 
     # divide the container into two (column 0 and 1)
@@ -25,6 +41,20 @@ def view_expenses(root, content_box, logic):
         "bd": 1,
         "font": ("Calibri", 14)
     }
+
+    # Total Expenses Card
+    total_expenses_card = tk.Frame(left_frame, bg=COLOR_CARD_BG, highlightbackground=COLOR_BORDER, highlightthickness=1, relief="flat")
+    total_expenses_card.pack(fill="x", padx=20, pady=(10, 20))
+    
+    balance_label = tk.Label(total_expenses_card, text="Total Expenses", font=("Calibri", 11), bg=COLOR_CARD_BG, fg="#555555")
+    balance_label.pack(pady=(10, 0))
+    
+    balance_value = tk.Label(total_expenses_card, text=f"₱{logic.total_expenses():,.2f}", font=("Calibri", 18, "bold"), bg=COLOR_CARD_BG, fg=COLOR_SIDEBAR_ACTIVE)
+    balance_value.pack(pady=(0, 10))
+
+    def update_expenses_display():
+        total_expenses = logic.total_expenses()
+        balance_value.config(text=f"₱{total_expenses:,.2f}")
 
     # page title
     page_title = tk.Label(left_frame, text="Add New Expense", font=("Calibri", 18, "bold"), bg=COLOR_CONTENT_BG)
@@ -221,6 +251,8 @@ def view_expenses(root, content_box, logic):
 
         # get all the incomes data
         current_expenses_list = logic.get_expenses()
+
+        update_expenses_display()
 
         # Create and display a new card for each income
         card_pos = 0 # starts at 0 each time so it generates at the top

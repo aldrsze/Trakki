@@ -2,24 +2,23 @@ import tkinter as tk
 from tkinter import ttk
 from colors import *
 
-_view_income_content_box = None
+view_income_content_box = None
+# view income
 def view_income(root, content_box, logic):
-    global _view_income_content_box
-    _view_income_content_box = content_box
+    global view_income_content_box
+    view_income_content_box = content_box
 
     refresh_income(logic)
 
+# refresh income
 def refresh_income(logic):
-    global _view_income_content_box
+    global view_income_content_box
 
-    if _view_income_content_box is None:
-        return
-    
-    for widget in _view_income_content_box.winfo_children():
+    for widget in view_income_content_box.winfo_children():
         widget.destroy()
 
     # container
-    split_container = tk.Frame(_view_income_content_box, bg=COLOR_CONTENT_BG)
+    split_container = tk.Frame(view_income_content_box, bg=COLOR_CONTENT_BG)
     split_container.pack(fill="both", expand=True, padx=10, pady=10)
 
     # divide the container into two (column 0 and 1)
@@ -45,15 +44,17 @@ def refresh_income(logic):
     total_income_card = tk.Frame(left_frame, bg=COLOR_CARD_BG, highlightbackground=COLOR_BORDER, highlightthickness=1, relief="flat")
     total_income_card.pack(fill="x", padx=20, pady=(10, 20))
     
-    balance_label = tk.Label(total_income_card, text="Total Income", font=("Calibri", 11), bg=COLOR_CARD_BG, fg=COLOR_MUTED)
-    balance_label.pack(pady=(10, 0))
+    # income label
+    income_label = tk.Label(total_income_card, text="Total Income", font=("Calibri", 11), bg=COLOR_CARD_BG, fg=COLOR_MUTED)
+    income_label.pack(pady=(10, 0))
     
-    balance_value = tk.Label(total_income_card, text=f"₱{logic.total_income():,.2f}", font=("Calibri", 18, "bold"), bg=COLOR_CARD_BG, fg=COLOR_SIDEBAR_ACTIVE)
-    balance_value.pack(pady=(0, 10))
+    # income value
+    income_value = tk.Label(total_income_card, text=f"₱{logic.total_income():,.2f}", font=("Calibri", 18, "bold"), bg=COLOR_CARD_BG, fg=COLOR_SIDEBAR_ACTIVE)
+    income_value.pack(pady=(0, 10))
 
     def update_income_display():
         total_income = logic.total_income()
-        balance_value.config(text=f"₱{total_income:,.2f}")
+        income_value.config(text=f"₱{total_income:,.2f}")
 
     # page title
     page_title = tk.Label(left_frame, text="Add New Income", font=("Calibri", 18, "bold"), bg=COLOR_CONTENT_BG)
@@ -85,6 +86,7 @@ def refresh_income(logic):
         category_input.delete(0, tk.END)
         description_input.delete('1.0', tk.END)
 
+    # function for resetting form
     def reset_form():
         clear_fields()
         editing_id[0] = None
@@ -92,6 +94,7 @@ def refresh_income(logic):
         submit_button.config(text="Add Income")
         cancel_button.pack_forget()  # Hide the cancel button
 
+    # function for handling submit
     def handle_submit():
         amount = amount_input.get()
         category = category_input.get()
@@ -108,6 +111,7 @@ def refresh_income(logic):
             tk.messagebox.showwarning("Error", "Amount must be a number.")
             return
 
+        # then if editing id is true it updates
         if editing_id[0]:
             logic.update_income(editing_id[0], amount, category, desc)
             tk.messagebox.showinfo("Success", "Update Income Successful!")
@@ -152,6 +156,7 @@ def refresh_income(logic):
     canvas.pack(side="left", fill="both", expand=True)
     canvas.bind("<Configure>", lambda e: canvas.itemconfig(canvas_window, width=e.width))
 
+    # function for handling card action buttons
     def handle_card_action(action, income_id):
         if action == "remove":
             response = tk.messagebox.askyesno("Delete", "Are you sure you want to delete?")
@@ -174,7 +179,8 @@ def refresh_income(logic):
                     description_input.insert('1.0', item.get_desc())
                     cancel_button.pack(fill="x", padx=20, pady=(5, 0))
                     break
-
+    
+    # function for creating income card
     def create_income_card(parent, row, col, income_id, amount, category, desc, date):
         # card
         card = tk.Frame(parent, bg=COLOR_CARD_BG, highlightbackground=COLOR_BORDER)
@@ -207,6 +213,7 @@ def refresh_income(logic):
         date_details = tk.Label(card, text=date, font=("Calibri", 10), fg=COLOR_SUBTEXT, bg=COLOR_CARD_BG)
         date_details.pack(anchor="w", padx=10, pady=(10, 15))
 
+    # function for refreshing cards
     def refresh_cards():
         # Clear all existing income cards
         for existing_card_widget in income_grid.winfo_children():

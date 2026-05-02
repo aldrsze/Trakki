@@ -2,48 +2,54 @@ import tkinter as tk
 from colors import *
 
 # Global reference to store the content box for refreshing
-_chat_content_box = None
-_chat_display = None
-_chat_input = None
-_message_list = []
-_chat_initialized = False
-_ai_chat = None
-_logic_ref = None
+chat_content_box = None
+chat_display = None
+chat_input = None
+message_list = []
+chat_initialized = False
+chat_greeted = False
+ai_chat = None
+logic_ref = None
 
 # temp key, for testing only
 GROQ_API_KEY = "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"
 
 # view ai chat
-def view_ai_chat(root, content_box, logic):
-    global _chat_content_box, _chat_initialized, _ai_chat, _logic_ref
-    _chat_content_box = content_box
-    _logic_ref = logic
+def viewai_chat(root, content_box, logic):
+    # global variables
+    global chat_content_box, chat_initialized, chat_greeted, ai_chat, logic_ref
+    chat_content_box = content_box
+    logic_ref = logic
     
     # Initialize AI chat once
-    if not _chat_initialized:
+    if not chat_initialized:
         try:
             from logic.ai_model import AIChat
-            _ai_chat = AIChat(GROQ_API_KEY)
+            ai_chat = AIChat(GROQ_API_KEY)
+            if not chat_greeted:
+                message_list.append(("AI", "Hi! I'm Penoy, your financial assistant. Ask me about your income, expenses, or savings."))
+                chat_greeted = True
             refresh_chat(logic)
-            _chat_initialized = True
+            chat_initialized = True
         except Exception as e:
+            if not chat_greeted:
+                message_list.append(("AI", "Hi! I'm Penoy, your financial assistant. Ask me about your income, expenses, or savings."))
+                chat_greeted = True
             refresh_chat(logic)
     else:
-        if _ai_chat:
-            # for storing the history of conversation
-            _ai_chat.conversation_history = []
+        # clear conversation history / ai memory
+        if ai_chat:
+            ai_chat.conversation_history = []
 
+# refresh_chat
 def refresh_chat(logic):
-    global _chat_content_box, _chat_display, _chat_input
+    global chat_content_box, chat_display, chat_input
 
-    if _chat_content_box is None:
-        return
-
-    for widget in _chat_content_box.winfo_children():
+    for widget in chat_content_box.winfo_children():
         widget.destroy()
 
     # Main frame
-    main_frame = tk.Frame(_chat_content_box, bg=COLOR_CONTENT_BG)
+    main_frame = tk.Frame(chat_content_box, bg=COLOR_CONTENT_BG)
     main_frame.pack(fill="both", expand=True, padx=15, pady=15)
 
     # Chat History Label
@@ -54,7 +60,8 @@ def refresh_chat(logic):
     chat_frame = tk.Frame(main_frame, bg="white", relief="solid", bd=1)
     chat_frame.pack(fill="both", expand=True, pady=(0, 15))
 
-    _chat_display = tk.Text(
+    # char display
+    chat_display = tk.Text(
         chat_frame,
         height=10,
         width=120,
@@ -68,23 +75,24 @@ def refresh_chat(logic):
         padx=10,
         pady=10
     )
-    _chat_display.pack(fill="both", expand=True)
+    chat_display.pack(fill="both", expand=True)
 
     display_messages()
 
-    # Suggested Prompts Label
+    # suggested prompts label
     prompts_label = tk.Label(main_frame, text="Suggested Prompts:", font=("Calibri", 12, "bold"), bg=COLOR_CONTENT_BG)
     prompts_label.pack(anchor="w", pady=(10, 8))
 
-    # Suggested Prompts Container
+    # suggested prompts container
     prompts_frame = tk.Frame(main_frame, bg=COLOR_CONTENT_BG)
     prompts_frame.pack(fill="x", pady=(0, 15))
     
-    # Configure grid columns for horizontal layout
+    # grid columns for horizontal layout
     for i in range(4):
         prompts_frame.grid_columnconfigure(i, weight=1)
 
     prompt_suggestions = [
+        "What is Trakki?",
         "How much have I spent this month?",
         "What's my total savings?",
         "Analyze my spending patterns",
@@ -95,15 +103,16 @@ def refresh_chat(logic):
     ]
 
     def insert_prompt(prompt_text):
-        _chat_input.delete("1.0", "end")
-        _chat_input.insert("1.0", prompt_text)
-        _chat_input.focus()
+        chat_input.delete("1.0", "end")
+        chat_input.insert("1.0", prompt_text)
+        chat_input.focus()
 
-    # Display prompts in 4 columns (2 rows for 7 items)
-    for idx, prompt in enumerate(prompt_suggestions):
-        row = idx // 4
-        col = idx % 4
+    # Display prompts in 4 columns (2 rows for 8 items)
+    for index, prompt in enumerate(prompt_suggestions):
+        row = index // 4
+        col = index % 4
         
+        # prompt button label
         prompt_btn = tk.Label(
             prompts_frame,
             text=f"• {prompt}",
@@ -121,7 +130,7 @@ def refresh_chat(logic):
     input_label = tk.Label(main_frame, text="Your message:", font=("Calibri", 12, "bold"), bg=COLOR_CONTENT_BG)
     input_label.pack(anchor="w", pady=(10, 8))
 
-    # Input Row (Input Box + Buttons)
+    # Input Row Frame
     input_row = tk.Frame(main_frame, bg=COLOR_CONTENT_BG)
     input_row.pack(fill="both", pady=(0, 10))
 
@@ -129,7 +138,8 @@ def refresh_chat(logic):
     input_container = tk.Frame(input_row, bg="white", relief="solid", bd=1)
     input_container.pack(side="left", fill="both", expand=True, padx=(0, 8))
 
-    _chat_input = tk.Text(
+    # input text
+    chat_input = tk.Text(
         input_container,
         height=3,
         width=100,
@@ -142,36 +152,49 @@ def refresh_chat(logic):
         padx=10,
         pady=10
     )
-    _chat_input.pack(fill="both", expand=True)
-    _chat_input.bind("<Control-Return>", lambda e: send_message())
+    chat_input.pack(fill="both", expand=True)
+    chat_input.bind("<Control-Return>", lambda e: send_message())
 
+    # send message function
     def send_message():
-        global _ai_chat, _logic_ref
-        message = _chat_input.get("1.0", "end-1c").strip()
+        global ai_chat, logic_ref
+        message = chat_input.get("1.0", "end-1c").strip()
+        # if there message is not empty
         if message:
-            _message_list.append(("You", message))
-            _chat_input.delete("1.0", "end")
+            message_list.append(("You", message))
+            chat_input.delete("1.0", "end")
             
-            if _ai_chat and _logic_ref:
+            # if ai is ready, get the reply
+            if ai_chat and logic_ref:
                 try:
-                    ai_response = _ai_chat.chat(message, _logic_ref)
-                    _message_list.append(("AI", ai_response))
+                    # send the message to the ai
+                    ai_response = ai_chat.chat(message, logic_ref)
+                    # save the ai reply
+                    message_list.append(("AI", ai_response))
                 except Exception as e:
-                    _message_list.append(("AI", f"Error: {str(e)}"))
+                    # if there is an error, show it in the chat
+                    message_list.append(("AI", f"Error: {str(e)}"))
             
+            # update the screen so the new messages show up
             display_messages()
 
+    # clear chat function
     def clear_chat():
-        global _message_list, _ai_chat
-        _message_list = []
-        if _ai_chat:
-            _ai_chat.clear_history()
+        global message_list, ai_chat, chat_greeted
+        message_list = []
+        chat_greeted = False
+        if ai_chat:
+            ai_chat.clear_history()
+        # show the first greeting again after clearing
+        message_list.append(("AI", "Hi! I'm Penoy, your financial assistant. Ask me about your income,   expenses, or savings."))
+        chat_greeted = True
         display_messages()
 
     # Button Frame
     button_frame = tk.Frame(input_row, bg=COLOR_CONTENT_BG)
     button_frame.pack(side="right", fill="y")
-
+    
+    # send button
     send_btn = tk.Button(
         button_frame,
         text="Send",
@@ -185,6 +208,7 @@ def refresh_chat(logic):
     )
     send_btn.pack(side="left", padx=(0, 5))
 
+    # clear button
     clear_btn = tk.Button(
         button_frame,
         text="Clear",
@@ -198,27 +222,33 @@ def refresh_chat(logic):
     )
     clear_btn.pack(side="left")
 
+# function for displaying messages
 def display_messages():
-    global _chat_display, _message_list
+    global chat_display, message_list
     
-    if _chat_display is None:
-        return
+    # unlock the text box so it is editable
+    chat_display.config(state="normal")
+    # remove old messages first
+    chat_display.delete("1.0", "end")
     
-    _chat_display.config(state="normal")
-    _chat_display.delete("1.0", "end")
-    
-    for sender, message in _message_list:
+    # go through each saved message and show it
+    for sender, message in message_list:
         if sender == "You":
-            _chat_display.insert("end", f"YOU:\n", "user_header")
-            _chat_display.insert("end", f"{message}\n\n", "user_message")
+            # user message style
+            chat_display.insert("end", f"YOU:\n", "user_header")
+            chat_display.insert("end", f"{message}\n\n", "user_message")
         else:
-            _chat_display.insert("end", f"AI:\n", "ai_header")
-            _chat_display.insert("end", f"{message}\n\n", "ai_message")
+            # ai message style
+            chat_display.insert("end", f"AI:\n", "ai_header")
+            chat_display.insert("end", f"{message}\n\n", "ai_message")
     
-    _chat_display.tag_config("user_header", foreground=COLOR_USER_HEADER, font=("Calibri", 15, "bold"))
-    _chat_display.tag_config("user_message", foreground="black", font=("Calibri", 15))
-    _chat_display.tag_config("ai_header", foreground=COLOR_AI_HEADER, font=("Calibri", 15, "bold"))
-    _chat_display.tag_config("ai_message", foreground="black", font=("Calibri", 15))
+    # set the colors and font styles
+    chat_display.tag_config("user_header", foreground=COLOR_USER_HEADER, font=("Calibri", 15, "bold"))
+    chat_display.tag_config("user_message", foreground="black", font=("Calibri", 15))
+    chat_display.tag_config("ai_header", foreground=COLOR_AI_HEADER, font=("Calibri", 15, "bold"))
+    chat_display.tag_config("ai_message", foreground="black", font=("Calibri", 15))
     
-    _chat_display.config(state="disabled")
-    _chat_display.see("end")
+    # lock it again so the user cannot type in it
+    chat_display.config(state="disabled")
+    # scroll to the latest message
+    chat_display.see("end")

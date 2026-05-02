@@ -75,7 +75,7 @@ nav_items = [
     ("Expenses", expenses_view.view_expenses),
     ("Savings", savings_view.view_savings),
     ("Transactions", transaction_view.view_transaction),
-    ("AI Chat", ai_chat_view.view_ai_chat)
+    ("AI Chat", ai_chat_view.viewai_chat)
 ]
 
 # Create all pages and their contents at startup

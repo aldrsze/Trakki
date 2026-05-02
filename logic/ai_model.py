@@ -1,16 +1,13 @@
 try:
     import requests
 except ImportError:
-    raise ImportError("requests package required. pip install requests --target ./lib")
+    raise ImportError("requests package required. pip install requests")
 
 class AIChat:
     def __init__(self, api_key):
-        """Initialize AI chat with Groq API (Free & Fast)"""
+        # Initialize AI chat with Groq API
         if not api_key or api_key == "YOUR_GROQ_API_KEY":
-            raise ValueError(
-                "Please set a valid GROQ_API_KEY in gui/ai_chat_view.py. "
-                "Get your free API key from: https://console.groq.com"
-            )
+            raise ValueError("API NOT VALID")
         
         self.api_key = api_key
         self.api_url = "https://api.groq.com/openai/v1/chat/completions"
@@ -23,25 +20,16 @@ class AIChat:
         expenses = logic.get_expenses()
         savings = logic.get_savings()
 
-        total_income = 0
-        for income in incomes:
-            total_income += income.get_amount()
-
-        total_expenses = 0
-        for expense in expenses:
-            total_expenses += expense.get_amount()
-
-        total_saved = 0
-        for goal in savings:
-            total_saved += goal.get_saved()
-
+        total_income = logic.total_income()
+        total_expenses = logic.total_expenses()
+        total_savings = logic.total_savings()
         current_balance = logic.current_balance()
 
         summary = f"""
 FINANCIAL DATA SUMMARY:
 - Total Income: ₱{total_income:,.2f}
 - Total Expenses: ₱{total_expenses:,.2f}
-- Total Saved: ₱{total_saved:,.2f}
+- Total Saved: ₱{total_savings:,.2f}
 - Current Balance: ₱{current_balance:,.2f}
 
 INCOMES:
@@ -118,59 +106,82 @@ STRICT CONSTRAINTS:
 2. LENGTH: Keep responses concise and easy to read, usually 1-2 paragraphs.
 3. SCOPE: Never invent data. Use only the financial summary provided above.
 """
-        # Add user message to history
+        # Add user message to history list
         self.conversation_history.append({
             "role": "user",
             "content": user_message
         })
         
         try:
+            # Create the headers dictionary (needed for the API request)
+            # This tells the API server what kind of data we're sending
             headers = {
+                # Add the API key for authentication (so the API knows)
                 "Authorization": f"Bearer {self.api_key}",
+                # Tell the API we're sending JSON format data
                 "Content-Type": "application/json",
             }
             
-            # Prepare messages for Groq API
+            # Create a list to hold all the messages we want to send to the AI
+            # Start with the system prompt that tells the AI how to behave
             messages = [
                 {"role": "system", "content": system_prompt},
             ]
             
-            # Add conversation history (last 5 messages for context)
+            # Loop through the last 5 messages from our conversation history
+            # This gives the AI context about what we've been talking about
             for msg in self.conversation_history[-5:]:
+                # Add each message to our messages list
                 messages.append(msg)
             
+            # Create the payload (the data packet we're sending to the API)
+            # This contains all the info the API needs to generate a response
             payload = {
-                "model": "llama-3.1-8b-instant",  # Free model
+                # Which AI model to use (llama-3.1-8b-instant is free and fast)
+                "model": "llama-3.1-8b-instant",
                 "messages": messages,
+                # how creative/random the response should be (0.7 is balanced)
                 "temperature": 0.7,
+                # Max tokens: maximum length of the AI response (512 is reasonable)
                 "max_tokens": 512,
             }
             
+            # Send a POST request to the Groq API with our payload and headers
+            # timeout=15 means if the request takes more than 15 seconds, cancel it
             response = requests.post(self.api_url, json=payload, headers=headers, timeout=15)
             
+            # Check if the status code is not 200 (200 means success)
             if response.status_code != 200:
-                try:
-                    error_data = response.json()
-                    error_msg = error_data.get("error", {}).get("message", f"HTTP {response.status_code}")
-                except:
-                    error_msg = f"HTTP {response.status_code}"
-                raise Exception(f"API Error: {error_msg}")
+                # Something went wrong with the API request
+                # Raise an error with the status code
+                raise Exception(f"API Error: HTTP {response.status_code}")
             
+            # Convert the API response to JSON format
             result = response.json()
+            # Extract the actual AI response text from deep inside the JSON structure
+            # [choices][0][message][content] is where the AI's answer is stored
             ai_response = result["choices"][0]["message"]["content"].strip()
             
-            # Add AI response to history
+            # Add the AI's response to our conversation history
             self.conversation_history.append({
+                # Mark this as coming from the AI assistant
                 "role": "assistant",
+                # Store the actual response content
                 "content": ai_response
             })
             
+            # Return the AI response back to whoever called this function
             return ai_response
+        
+        # Handle different types of errors that might occur:
         except requests.exceptions.Timeout:
+            # If the API request times out (takes too long), return this message
             return "Request timed out. Please try again."
         except requests.exceptions.ConnectionError:
+            # If we can't connect to the API (no internet?), return this message
             return "Connection error. Please check your internet connection."
         except Exception as e:
+            # For any other error we didn't anticipate, return the error details
             return f"Error: {str(e)}"
     
     def clear_history(self):

@@ -94,7 +94,7 @@ def refresh_expense(logic):
     # descrioption input field
     description_label = tk.Label(left_frame, text="Description:", bg=COLOR_CONTENT_BG, font=("Calibri", 14, "bold"))
     description_label.pack(anchor="w", padx=20)
-    description_input = tk.Text(left_frame, height=6, wrap="word", **input_style)
+    description_input = tk.Text(left_frame, height=3, wrap="word", **input_style)
     description_input.pack(fill="x", padx=20, pady=(0, 10))
 
     # function for clearing input fields
@@ -289,13 +289,13 @@ def refresh_expense(logic):
             expense_item = current_expenses_list[expense_index]
 
             # calculate which row this card should go into.
-            target_row = card_pos // 2
+            savings_row = card_pos // 2
 
             # Calculate which column this card should go into.
-            target_column = card_pos % 2 # Modulo 2 gives remainder (0 or 1)
+            savings_column = card_pos % 2 # Modulo 2 gives remainder (0 or 1)
 
             # call a separate function to visually create one income card.
-            create_expense_card(parent=expense_grid, row=target_row, col=target_column, expense_id=expense_item.get_expense_id(), amount=expense_item.get_amount(), category=expense_item.get_category(), desc=expense_item.get_desc(), date=expense_item.get_date())
+            create_expense_card(parent=expense_grid, row=savings_row, col=savings_column, expense_id=expense_item.get_expense_id(), amount=expense_item.get_amount(), category=expense_item.get_category(), desc=expense_item.get_desc(), date=expense_item.get_date())
 
             card_pos += 1
 

@@ -232,13 +232,13 @@ def refresh_income(logic):
             income_item = current_incomes_list[income_index]
 
             # calculate which row this card should go into.
-            target_row = card_pos // 2
+            savings_row = card_pos // 2
 
             # Calculate which column this card should go into.
-            target_column = card_pos % 2 # Modulo 2 gives remainder (0 or 1)
+            savings_column = card_pos % 2 # Modulo 2 gives remainder (0 or 1)
 
             # call a separate function to visually create one income card.
-            create_income_card(parent=income_grid, row=target_row, col=target_column, income_id=income_item.get_income_id(), amount=income_item.get_amount(), category=income_item.get_category(), desc=income_item.get_desc(), date=income_item.get_date())
+            create_income_card(parent=income_grid, row=savings_row, col=savings_column, income_id=income_item.get_income_id(), amount=income_item.get_amount(), category=income_item.get_category(), desc=income_item.get_desc(), date=income_item.get_date())
 
             card_pos += 1
 

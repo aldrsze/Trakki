@@ -16,3 +16,4 @@ COLOR_SUBTEXT = "#888888"       # Secondary text / date
 COLOR_PROMPT_LINK = "#2563EB"   # Prompt link color
 COLOR_USER_HEADER = "#3498db"   # Chat user header
 COLOR_AI_HEADER = "#2ecc71"     # Chat AI header
+SAVINGS_COMPLETED = "#40ca40"   # Savings Completed Card

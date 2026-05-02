@@ -186,7 +186,7 @@ def refresh_chat(logic):
         if ai_chat:
             ai_chat.clear_history()
         # show the first greeting again after clearing
-        message_list.append(("AI", "Hi! I'm Penoy, your financial assistant. Ask me about your income,   expenses, or savings."))
+        message_list.append(("AI", "Hi! I'm Penoy, your financial assistant. Ask me about your income, expenses, or savings."))
         chat_greeted = True
         display_messages()
 

@@ -2,28 +2,24 @@ import tkinter as tk
 from tkinter import ttk
 from colors import *
 
-_view_savings_content_box = None
+view_savings_content_box = None
 
 def view_savings(root, content_box, logic):
-    global _view_savings_content_box
-    _view_savings_content_box = content_box
+    global view_savings_content_box
+    view_savings_content_box = content_box
 
     refresh_savings(logic)
 
 def refresh_savings(logic):
-    global _view_savings_content_box
+    global view_savings_content_box
     
-    if _view_savings_content_box is None:
-        return
-
     # Clear the content box before rebuilding
-    for widget in _view_savings_content_box.winfo_children():
+    for widget in view_savings_content_box.winfo_children():
         widget.destroy()
 
     # container
-    split_container = tk.Frame(_view_savings_content_box, bg=COLOR_CONTENT_BG)
+    split_container = tk.Frame(view_savings_content_box, bg=COLOR_CONTENT_BG)
     split_container.pack(fill="both", expand=True, padx=10, pady=10)
-    
     split_container.grid_columnconfigure(0, weight=1, uniform="equal")
     split_container.grid_columnconfigure(1, weight=1, uniform="equal")
     split_container.grid_rowconfigure(0, weight=1)
@@ -46,18 +42,21 @@ def refresh_savings(logic):
     balance_card = tk.Frame(left_frame, bg=COLOR_CARD_BG, highlightbackground=COLOR_BORDER, highlightthickness=1, relief="flat")
     balance_card.pack(fill="x", padx=20, pady=(10, 20))
     
+    # balance label
     balance_label = tk.Label(balance_card, text="Current Balance", font=("Calibri", 11), bg=COLOR_CARD_BG, fg=COLOR_MUTED)
     balance_label.pack(pady=(10, 0))
     
+    # balance value
+    balance_value = tk.Label(balance_card, text=f"₱{logic.current_balance():,.2f}", font=("Calibri", 18, "bold"), bg=COLOR_CARD_BG, fg=COLOR_SIDEBAR_ACTIVE)
+    balance_value.pack(pady=(0, 10))
+    
+    # function for updating balance
     def update_balance_display():
         current_balance = logic.current_balance()
         balance_value.config(text=f"₱{current_balance:,.2f}")
     
-    balance_value = tk.Label(balance_card, text=f"₱{logic.current_balance():,.2f}", font=("Calibri", 18, "bold"), bg=COLOR_CARD_BG, fg=COLOR_SIDEBAR_ACTIVE)
-    balance_value.pack(pady=(0, 10))
-    
     # page title
-    page_title = tk.Label(left_frame, text="Add Target Savings", font=("Calibri", 18, "bold"), bg=COLOR_CONTENT_BG)
+    page_title = tk.Label(left_frame, text="Add Savings", font=("Calibri", 18, "bold"), bg=COLOR_CONTENT_BG)
     page_title.pack(pady=(20, 20), anchor="w", padx=20)
 
     # item
@@ -72,31 +71,33 @@ def refresh_savings(logic):
     cost_input = tk.Entry(left_frame, **input_style)
     cost_input.pack(fill="x", padx=20, pady=(0, 15), ipady=4)
 
-    # target date
-    target_label = tk.Label(left_frame, text="Target Date (MM/DD/YYYY):", bg=COLOR_CONTENT_BG, font=("Calibri", 14, "bold"))
-    target_label.pack(anchor="w", padx=20)
-    target_input = tk.Entry(left_frame, **input_style)
-    target_input.pack(fill="x", padx=20, pady=(0, 10), ipady=4)
+    # savings date
+    savings_label = tk.Label(left_frame, text="Target Date (MM-DD-YYYY):", bg=COLOR_CONTENT_BG, font=("Calibri", 14, "bold"))
+    savings_label.pack(anchor="w", padx=20)
+    savings_input = tk.Entry(left_frame, **input_style)
+    savings_input.pack(fill="x", padx=20, pady=(0, 10), ipady=4)
 
     # function for clearing input fields
     def clear_fields():
         item_input.delete(0, tk.END)
         cost_input.delete(0, tk.END)
-        target_input.delete(0 , tk.END)
+        savings_input.delete(0 , tk.END)
 
+    # function for resetting form
     def reset_form():
         clear_fields()
         editing_id[0] = None
-        page_title.config(text="Add New Target")
-        submit_button.config(text="Add Target")
+        page_title.config(text="Add New savings")
+        submit_button.config(text="Add savings")
         cancel_button.pack_forget()  # Hide the cancel button
 
     editing_id = [None]
 
+    # function for handling submit button
     def handle_submit():
         item = item_input.get()
         cost = cost_input.get()
-        date = target_input.get()
+        date = savings_input.get()
 
         # Checks if all fields are not empty
         if not item or not cost or not date:
@@ -105,11 +106,11 @@ def refresh_savings(logic):
         # catches unvalid number
         try:
             if editing_id[0]:
-                logic.update_target(editing_id[0], item, cost, date)
-                tk.messagebox.showinfo("Success", "Update Target Successful!")
+                logic.update_savings(editing_id[0], item, cost, date)
+                tk.messagebox.showinfo("Success", "Update savings Successful!")
             else:
-                logic.add_target(item, cost, date)
-                tk.messagebox.showinfo("Success", "Add Target Successful!")
+                logic.add_savings(item, cost, date)
+                tk.messagebox.showinfo("Success", "Add savings Successful!")
         except ValueError:
             tk.messagebox.showwarning("Error", "Cost must be a number.")
             return
@@ -118,7 +119,7 @@ def refresh_savings(logic):
         reset_form()
 
     # Pack the submit button
-    submit_button = tk.Button(left_frame, text="Add Target", bg=COLOR_SIDEBAR, font=("Calibri", 14, "bold"), fg="white", bd=0, padx=15, pady=8, command=handle_submit)
+    submit_button = tk.Button(left_frame, text="Add savings", bg=COLOR_SIDEBAR, font=("Calibri", 14, "bold"), fg="white", bd=0, padx=15, pady=8, command=handle_submit)
     submit_button.pack(fill="x", padx=20, pady=(10, 5)) 
 
     # Pack the cancel button
@@ -137,13 +138,13 @@ def refresh_savings(logic):
     scrollbar = ttk.Scrollbar(right_frame, orient="vertical", command=canvas.yview)
 
     # Frame for the cards in the canvas
-    target_grid = tk.Frame(canvas, bg=COLOR_CONTENT_BG)
+    savings_grid = tk.Frame(canvas, bg=COLOR_CONTENT_BG)
 
     # determines how long the list for the scrolling
-    target_grid.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+    savings_grid.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
     
     # put frame inside canvas window
-    canvas_window = canvas.create_window((0, 0), window=target_grid, anchor="nw")
+    canvas_window = canvas.create_window((0, 0), window=savings_grid, anchor="nw")
 
     # link scrollbar and canvas
     canvas.configure(yscrollcommand=scrollbar.set)
@@ -151,25 +152,26 @@ def refresh_savings(logic):
     canvas.pack(side="left", fill="both", expand=True)
     canvas.bind("<Configure>", lambda e: canvas.itemconfig(canvas_window, width=e.width))
 
-    def handle_card_action(action, target_id):
+    # function for handling card action buttons
+    def handle_card_action(action, savings_id):
         if action == "remove":
             response = tk.messagebox.askyesno("Delete", "Are you sure you want to delete?")
             if response:
-                logic.remove_target(target_id)  # Call the logic to remove income
-                tk.messagebox.showinfo("Success", "Deletion of Target Successful!")
+                logic.remove_savings(savings_id)  # Call the logic to remove income
+                tk.messagebox.showinfo("Success", "Deletion of savings Successful!")
                 refresh_cards()  # Refresh the cards to reflect changes
         elif action == "edit": 
             for item in logic.get_savings():
-                if item.get_target_id() == target_id:
-                    editing_id[0] = target_id
-                    page_title.config(text="Edit Target")
-                    submit_button.config(text="Update Target")
+                if item.get_savings_id() == savings_id:
+                    editing_id[0] = savings_id
+                    page_title.config(text="Edit savings")
+                    submit_button.config(text="Update savings")
                     item_input.delete(0, tk.END) # delete input
                     item_input.insert(0, item.get_name()) # insert current data
                     cost_input.delete(0, tk.END)
                     cost_input.insert(0, item.get_cost())
-                    target_input.delete(0, tk.END)
-                    target_input.insert(0, item.get_date())
+                    savings_input.delete(0, tk.END)
+                    savings_input.insert(0, item.get_date())
                     cancel_button.pack(fill="x", padx=20, pady=(5, 0))
                     break
 
@@ -181,7 +183,7 @@ def refresh_savings(logic):
                 tk.messagebox.showwarning("Error", "Amount must be greater than zero.")
                 return
             for item in logic.get_savings():
-                if item.get_target_id() == target_id:
+                if item.get_savings_id() == savings_id:
                     if logic.current_balance() < fund:
                         tk.messagebox.showwarning("Error", "Insufficient balance.")
                         return
@@ -191,7 +193,7 @@ def refresh_savings(logic):
                         tk.messagebox.showwarning("Error", f"You can only add up to ₱{needed:,.2f} for this goal.")
                         return
                     item.set_saved(item.get_saved() + fund)
-                    logic.add_savings_transaction(item.get_target_id(), item.get_name(), fund)
+                    logic.add_savings_transaction(item.get_savings_id(), item.get_name(), fund)
                     tk.messagebox.showinfo("Success", f"Added ₱{fund:,.2f} to {item.get_name()}.")
                     refresh_cards()
                     break
@@ -204,7 +206,7 @@ def refresh_savings(logic):
                 tk.messagebox.showwarning("Error", "Amount must be greater than zero.")
                 return
             for item in logic.get_savings():
-                if item.get_target_id() == target_id:
+                if item.get_savings_id() == savings_id:
                     if item.get_saved() < fund:
                         tk.messagebox.showwarning("Error", "Insufficient saved funds.")
                         return
@@ -213,10 +215,11 @@ def refresh_savings(logic):
                     refresh_cards()
                     break
 
-    def create_target_card(parent, row, col, target_id, name, cost_str, saved_str, needed_str, progress_val, date, is_completed=False):
+    # functions for creating savings card
+    def create_savings_card(parent, row, col, savings_id, name, cost_str, saved_str, needed_str, progress_val, date, is_completed=False):
         # Determine card color based on completion status
         if is_completed:
-            card_color = COLOR_SUCCESS  # Green
+            card_color = SAVINGS_COMPLETED
             text_color = "white"
         else:
             card_color = COLOR_CARD_BG
@@ -233,7 +236,7 @@ def refresh_savings(logic):
 
         # Show completed badge if the card is completed
         if is_completed:
-            completed_label = tk.Label(top_row, text="COMPLETED", font=("Calibri", 9, "bold"), fg="white", bg=COLOR_SUCCESS_ALT, padx=5, pady=1)
+            completed_label = tk.Label(top_row, text="COMPLETED", font=("Calibri", 9, "bold"), fg="white", bg=SAVINGS_COMPLETED, padx=5, pady=1)
             completed_label.pack(side="left", padx=(0, 10))
 
         # name
@@ -241,22 +244,22 @@ def refresh_savings(logic):
         name_label.pack(side="left")
 
         # remove button
-        remove_button = tk.Button(top_row, text="Remove", font=("Calibri", 10), fg="red", bg=card_color, bd=0, cursor="hand2", command=lambda: handle_card_action("remove", target_id))
+        remove_button = tk.Button(top_row, text="Remove", font=("Calibri", 10), fg="red", bg=card_color, bd=0, cursor="hand2", command=lambda: handle_card_action("remove", savings_id))
         remove_button.pack(side="right")
 
         # edit button (only show if not completed)
         if not is_completed:
-            edit_button = tk.Button(top_row, text="Edit", font=("Calibri", 10), fg=text_color, bg=card_color, bd=0, cursor="hand2", command=lambda: handle_card_action("edit", target_id))
+            edit_button = tk.Button(top_row, text="Edit", font=("Calibri", 10), fg=text_color, bg=card_color, bd=0, cursor="hand2", command=lambda: handle_card_action("edit", savings_id))
             edit_button.pack(side="right", padx=5)
 
         # Add Funds button (only show if not completed)
         if not is_completed:
-            add_fund_button = tk.Button(top_row, text="Add Funds", font=("Calibri", 10), fg="green", bg=card_color, bd=0, cursor="hand2", command=lambda: handle_card_action("add_funds", target_id))
+            add_fund_button = tk.Button(top_row, text="Add Funds", font=("Calibri", 10), fg="green", bg=card_color, bd=0, cursor="hand2", command=lambda: handle_card_action("add_funds", savings_id))
             add_fund_button.pack(side="right")
 
         # Deduct Funds button (only show if not completed)
         if not is_completed:
-            minus_fund_button = tk.Button(top_row, text="Deduct Funds", font=("Calibri", 10), fg="green", bg=card_color, bd=0, cursor="hand2", command=lambda: handle_card_action("minus_funds", target_id))
+            minus_fund_button = tk.Button(top_row, text="Deduct Funds", font=("Calibri", 10), fg="green", bg=card_color, bd=0, cursor="hand2", command=lambda: handle_card_action("minus_funds", savings_id))
             minus_fund_button.pack(side="right")
 
         # cost
@@ -281,9 +284,10 @@ def refresh_savings(logic):
         goal_label = tk.Label(card, text=f"Goal Date: {date}", font=("Calibri", 10), fg=text_color, bg=card_color)
         goal_label.pack(anchor="w", padx=10, pady=(5, 15))
 
+    # function for refreshing cards
     def refresh_cards():
         # Clear all existing savings cards
-        for existing_card_widget in target_grid.winfo_children():
+        for existing_card_widget in savings_grid.winfo_children():
             existing_card_widget.destroy()
 
         update_balance_display()
@@ -295,45 +299,45 @@ def refresh_savings(logic):
         incomplete_cards = []
         completed_cards = []
 
-        for target in current_savings_list:
-            if target.get_progress() >= 100:
-                completed_cards.append(target)
+        for savings in current_savings_list:
+            if savings.get_progress() >= 100:
+                completed_cards.append(savings)
             else:
-                incomplete_cards.append(target)
+                incomplete_cards.append(savings)
 
         # Display incomplete cards first (newest first)
         card_pos = 0
         for i in range(len(incomplete_cards) - 1, -1, -1):
-            target = incomplete_cards[i]
-            create_target_card(
-                parent=target_grid,
+            savings = incomplete_cards[i]
+            create_savings_card(
+                parent=savings_grid,
                 row=card_pos,
                 col=0,
-                target_id=target.get_target_id(),
-                name=target.get_name(),
-                cost_str=target.get_cost(),
-                saved_str=target.get_saved(),
-                needed_str=target.get_needed(),
-                progress_val=target.get_progress(),
-                date=target.get_date(),
+                savings_id=savings.get_savings_id(),
+                name=savings.get_name(),
+                cost_str=savings.get_cost(),
+                saved_str=savings.get_saved(),
+                needed_str=savings.get_needed(),
+                progress_val=savings.get_progress(),
+                date=savings.get_date(),
                 is_completed=False
             )
             card_pos += 1
 
         # Display completed cards at the bottom
         for i in range(len(completed_cards) - 1, -1, -1):
-            target = completed_cards[i]
-            create_target_card(
-                parent=target_grid,
+            savings = completed_cards[i]
+            create_savings_card(
+                parent=savings_grid,
                 row=card_pos,
                 col=0,
-                target_id=target.get_target_id(),
-                name=target.get_name(),
-                cost_str=target.get_cost(),
-                saved_str=target.get_saved(),
-                needed_str=target.get_needed(),
-                progress_val=target.get_progress(),
-                date=target.get_date(),
+                savings_id=savings.get_savings_id(),
+                name=savings.get_name(),
+                cost_str=savings.get_cost(),
+                saved_str=savings.get_saved(),
+                needed_str=savings.get_needed(),
+                progress_val=savings.get_progress(),
+                date=savings.get_date(),
                 is_completed=True
             )
             card_pos += 1

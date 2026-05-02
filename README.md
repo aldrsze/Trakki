@@ -5,7 +5,7 @@ Trakki is a Python-based desktop application built with Tkinter that helps you e
 ## Features
 * **Dashboard & Analytics:** View your current balance, total income, expenses, and savings at a glance with visual charts.
 * **Expense & Income Tracking:** Add, edit, and remove transactions to keep your finances up to date.
-* **Savings Goals:** Set target savings goals, track your progress, and manage funds dedicated to specific items.
+* **Savings Goals:** Set savings savings goals, track your progress, and manage funds dedicated to specific items.
 * **AI Financial Coach:** Chat with a built-in AI assistant that analyzes your current financial data and provides actionable, personalized advice in English and Tagalog.
 * **Transaction History:** Review all your past financial activities in a clean table view.
 

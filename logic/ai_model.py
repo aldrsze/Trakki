@@ -56,7 +56,7 @@ INCOMES:
         summary += "\nSAVINGS GOALS:\n"
         for goal in savings:
             summary += (
-                f"  • Target ID: {goal.get_target_id()}\n"
+                f"  • savings ID: {goal.get_savings_id()}\n"
                 f"    Name: {goal.get_name()}\n"
                 f"    Cost: ₱{goal.get_cost():,.2f}\n"
                 f"    Saved: ₱{goal.get_saved():,.2f}\n"

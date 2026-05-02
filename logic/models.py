@@ -60,9 +60,9 @@ class Income:
     def set_desc(self, desc):
         self.__desc = desc
 
-class Target:
-    def __init__(self, target_id, name, cost, date, saved=0.00, created_at=None):
-        self.__target_id = target_id
+class savings:
+    def __init__(self, savings_id, name, cost, date, saved=0.00, created_at=None):
+        self.__savings_id = savings_id
         self.__name = name
         self.__cost = float(cost)
         self.__saved = float(saved)
@@ -74,7 +74,7 @@ class Target:
         else:
             self.__created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    def get_target_id(self): return self.__target_id
+    def get_savings_id(self): return self.__savings_id
     def get_name(self): return self.__name
     def get_cost(self): return float(self.__cost)
     def get_saved(self): return self.__saved
@@ -102,10 +102,10 @@ class Target:
 
 # object for savings transac such as fundings to save a record
 class SavingsTransaction:
-    def __init__(self, transaction_id, target_id, target_name, amount, date_string=None):
+    def __init__(self, transaction_id, savings_id, savings_name, amount, date_string=None):
         self.__transaction_id = transaction_id
-        self.__target_id = target_id
-        self.__target_name = target_name
+        self.__savings_id = savings_id
+        self.__savings_name = savings_name
         self.__amount = float(amount)
 
         # if custom date, otherwise use now
@@ -115,7 +115,7 @@ class SavingsTransaction:
             self.__date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     def get_transaction_id(self): return self.__transaction_id
-    def get_target_id(self): return self.__target_id
-    def get_target_name(self): return self.__target_name
+    def get_savings_id(self): return self.__savings_id
+    def get_savings_name(self): return self.__savings_name
     def get_amount(self): return float(self.__amount)
     def get_date(self): return self.__date

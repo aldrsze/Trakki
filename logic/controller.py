@@ -1,4 +1,4 @@
-from logic.models import Expense, Income, Target, SavingsTransaction
+from logic.models import Expense, Income, savings, SavingsTransaction
 
 class TrakkiLogic:
     SAMPLE_INCOMES = [
@@ -22,7 +22,7 @@ class TrakkiLogic:
     # Total Monthly Expenses: 12,700.00
     # Remaining Cash Flow for Savings: 6,300.00
 
-    SAMPLE_TARGETS = [
+    SAMPLE_SAVINGS = [
         ("Midterm Tuition Fund", 15000.00, "2026-05-15 00:00:00", 1000.00, "2026-04-02 08:00:00"),
         ("New Laptop Fund", 35000.00, "2026-09-01 00:00:00", 500.00, "2026-03-20 12:00:00"),
         ("Emergency Fund", 5000.00, "2026-12-31 00:00:00", 100.00, "2026-03-25 10:00:00"),
@@ -39,7 +39,7 @@ class TrakkiLogic:
         # for tracking the id of the models
         self.__next_income_id = 1
         self.__next_expense_id = 1
-        self.__next_target_id = 1
+        self.__next_savings_id = 1
         self.__next_savings_transaction_id = 1
 
         self._load_sample_data()
@@ -64,19 +64,19 @@ class TrakkiLogic:
         for amount, category, desc, date_string in self.SAMPLE_EXPENSES:
             self.add_expense(amount, category, desc, date_string)
 
-        for name, cost, goal_date, saved_amount, created_at in self.SAMPLE_TARGETS:
-            self.add_target(name, cost, goal_date, saved_amount, created_at)
+        for name, cost, goal_date, saved_amount, created_at in self.SAMPLE_SAVINGS:
+            self.add_savings(name, cost, goal_date, saved_amount, created_at)
 
-        self._seed_savings_transactions()
+        self.initialize_savings_transactions()
 
-    def _seed_savings_transactions(self):
-        for target in self.__savings:
-            if target.get_saved() > 0:
+    def initialize_savings_transactions(self):
+        for savings in self.__savings:
+            if savings.get_saved() > 0:
                 self.add_savings_transaction(
-                    target.get_target_id(),
-                    target.get_name(),
-                    target.get_saved(),
-                    target.get_created_at()
+                    savings.get_savings_id(),
+                    savings.get_name(),
+                    savings.get_saved(),
+                    savings.get_created_at()
                 )
 
     # Instance Methods to ADD new data using the Models
@@ -120,35 +120,35 @@ class TrakkiLogic:
                 self.__incomes.pop(income)
                 break  # Stop after finding and removing the first match
 
-    def add_target(self, name, cost, date, saved=0.0, created_at=None):
-        new_target = Target(self.__next_target_id, name, cost, date, saved, created_at)
-        self.__savings.append(new_target)
-        self.__next_target_id += 1 # increase per add
+    def add_savings(self, name, cost, date, saved=0.0, created_at=None):
+        new_savings = savings(self.__next_savings_id, name, cost, date, saved, created_at)
+        self.__savings.append(new_savings)
+        self.__next_savings_id += 1 # increase per add
 
-    def add_savings_transaction(self, target_id, target_name, amount, date_string=None):
+    def add_savings_transaction(self, savings_id, savings_name, amount, date_string=None):
         new_transaction = SavingsTransaction(
             self.__next_savings_transaction_id,
-            target_id,
-            target_name,
+            savings_id,
+            savings_name,
             amount,
             date_string
         )
         self.__savings_transactions.append(new_transaction)
         self.__next_savings_transaction_id += 1
 
-    def update_target(self, target_id, name, cost, date):
-        for target in self.__savings:
-            if target.get_target_id() == target_id:
-                target.set_name(name)
-                target.set_cost(cost)
-                target.set_date(date)
+    def update_savings(self, savings_id, name, cost, date):
+        for savings in self.__savings:
+            if savings.get_savings_id() == savings_id:
+                savings.set_name(name)
+                savings.set_cost(cost)
+                savings.set_date(date)
                 break
 
-    def remove_target(self, target_id):
-        # remove target by id
-        for target in range(len(self.__savings)):
-            if self.__savings[target].get_target_id() == target_id:
-                self.__savings.pop(target)
+    def remove_savings(self, savings_id):
+        # remove savings by id
+        for savings in range(len(self.__savings)):
+            if self.__savings[savings].get_savings_id() == savings_id:
+                self.__savings.pop(savings)
                 break  # Stop after finding and removing the first match
 
     def total_income(self):
@@ -174,7 +174,7 @@ class TrakkiLogic:
 
     def total_savings(self):
         total = 0
-        for target in self.get_savings():
-            amount = target.get_saved()
+        for savings in self.get_savings():
+            amount = savings.get_saved()
             total += float(str(amount))
         return total

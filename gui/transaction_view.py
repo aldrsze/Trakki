@@ -4,28 +4,24 @@ from datetime import datetime
 from colors import *
 
 # Global reference to store the content box for refreshing
-_table_content_box = None
+table_content_box = None
 
 def view_transaction(root, content_box, logic):
-    global _table_content_box
-    _table_content_box = content_box
+    global table_content_box
+    table_content_box = content_box
 
     # Refresh the table every time the view is activated
     refresh_table(logic)
 
 def refresh_table(logic):
-    global _table_content_box
-
-    if _table_content_box is None:
-        return
+    global table_content_box
 
     # Clear everything 
-    all_widgets = _table_content_box.winfo_children()
-    for w in all_widgets:
+    for w in table_content_box.winfo_children():
         w.destroy()
 
     # Main frame for the view table
-    main_frame = tk.Frame(_table_content_box, bg=COLOR_CONTENT_BG)
+    main_frame = tk.Frame(table_content_box, bg=COLOR_CONTENT_BG)
     main_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
     # Header frame
@@ -45,9 +41,11 @@ def refresh_table(logic):
     tree_frame = tk.Frame(main_frame, bg=COLOR_CONTENT_BG, highlightbackground=COLOR_BORDER, highlightthickness=1)
     tree_frame.pack(fill="both", expand=True, padx=20, pady=(0, 20))
 
+    # scrollbar
     tree_scroll = ttk.Scrollbar(tree_frame)
     tree_scroll.pack(side="right", fill="y")
 
+    # column
     columns = ("Type", "Category/Name", "Description", "Amount/Cost", "Date")
     tree = ttk.Treeview(tree_frame, columns=columns, show="headings", yscrollcommand=tree_scroll.set, selectmode="extended")
     tree.pack(fill="both", expand=True)
@@ -88,7 +86,7 @@ def refresh_table(logic):
         borderwidth=0
     )
 
-    # Sorting and Updating Logic
+    # function for parsing date
     def parse_date(d):
         try:
             return datetime.strptime(str(d).strip(), "%Y-%m-%d %H:%M:%S")
@@ -98,7 +96,8 @@ def refresh_table(logic):
             except ValueError:
                 return datetime.min
 
-    def update_the_table():
+    # function for updating table
+    def update_table():
         # Delete old rows
         for r in tree.get_children():
             tree.delete(r)
@@ -113,7 +112,7 @@ def refresh_table(logic):
             my_data_list.append(("Expense", e.get_category(), e.get_desc(), e.get_amount(), e.get_date()))
             
         for transaction in logic.get_savings_transactions():
-            my_data_list.append(("Savings", transaction.get_target_name(), "Savings Deposit", transaction.get_amount(), transaction.get_date()))
+            my_data_list.append(("Savings", transaction.get_savings_name(), "Savings Deposit", transaction.get_amount(), transaction.get_date()))
 
         # Sort based on date and time (newly added on top)
         my_data_list.sort(key=lambda x: parse_date(x[4]), reverse=True)
@@ -135,5 +134,4 @@ def refresh_table(logic):
             # Put the row in the table
             tree.insert("", "end", values=(type_of_record, name, description, money_string, date))
 
-    # run
-    update_the_table()
+    update_table()

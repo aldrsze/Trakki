@@ -19,9 +19,9 @@ Trakki is a Python-based desktop application built with Tkinter that helps you e
 
 2. **Install Dependencies**
       Open your terminal/command prompt, navigate to the project folder, and run:
-         ```bash
-            pip install -r requirements.txt
-         ```
+      ```bash
+         pip install -r requirements.txt
+      ```
       or if you are on windows/mac/linux, simply click install_dependencies.bat/install_dependencies.sh
 
  3. **Run the Application**

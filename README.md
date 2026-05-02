@@ -9,6 +9,15 @@ Trakki is a Python-based desktop application built with Tkinter that helps you e
 * **AI Financial Coach:** Chat with a built-in AI assistant that analyzes your current financial data and provides actionable, personalized advice in English and Tagalog.
 * **Transaction History:** Review all your past financial activities in a clean table view.
 
+## Screenshots
+
+![Screenshot 1](res/screenshot-1.jpg)
+![Screenshot 2](res/screenshot-2.jpg)
+![Screenshot 3](res/screenshot-3.jpg)
+![Screenshot 4](res/screenshot-4.jpg)
+![Screenshot 5](res/screenshot-5.jpg)
+![Screenshot 6](res/screenshot-6.jpg)
+
 ## Prerequisites
 * Python 3.x
 

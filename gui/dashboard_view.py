@@ -3,42 +3,38 @@ from colors import *
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-from logic.controller import TrakkiLogic
+# content box placeholder
+dashboard_content_box = None
 
-logic = TrakkiLogic()
-
-# Global reference to store the content box for refreshing
-_dashboard_content_box = None
-
+# view_dashboard
 def view_dashboard(root, content_box, logic):
-    global _dashboard_content_box
-    _dashboard_content_box = content_box
+    global dashboard_content_box
+    dashboard_content_box = content_box
     
     # refresh each time view_dashboard is called
     refresh_dashboard(logic)
 
+# refresh_dashboard
 def refresh_dashboard(logic):
-    global _dashboard_content_box
+    global dashboard_content_box
 
-    # Clear the content box before rebuilding
-    for widget in _dashboard_content_box.winfo_children():
+    # clear all the widgets
+    for widget in dashboard_content_box.winfo_children():
         widget.destroy()
 
-    # Header frame (the one with filtering)
-    header_frame = tk.Frame(_dashboard_content_box, bg=COLOR_CONTENT_BG)
+    # Header frame
+    header_frame = tk.Frame(dashboard_content_box, bg=COLOR_CONTENT_BG)
     header_frame.pack(fill="x", padx=20, pady=10)
 
+    # title label
     title = tk.Label(header_frame, text="Financial Overview", font=("Calibri", 16, "bold"), bg=COLOR_CONTENT_BG)
     title.pack(side="left")
 
-    filter_frame = tk.Frame(header_frame, bg=COLOR_CARD_BG, highlightbackground=COLOR_BORDER)
-    filter_frame.pack(side="right")
-
     # containers (cards)
-    cards_frame = tk.Frame(_dashboard_content_box, bg=COLOR_CONTENT_BG)
+    cards_frame = tk.Frame(dashboard_content_box, bg=COLOR_CONTENT_BG)
     cards_frame.pack(fill="x", padx=20, pady=(0, 20))
     cards_frame.grid_rowconfigure(0, weight=1)
-    chart_frame = tk.Frame(_dashboard_content_box, bg=COLOR_CONTENT_BG, highlightbackground=COLOR_BORDER)
+    chart_frame = tk.Frame(dashboard_content_box, bg=COLOR_CONTENT_BG, highlightbackground=COLOR_BORDER)
     chart_frame.pack(fill="both", expand=True, padx=30, pady=(0, 20))
 
     # function for creating cards container
@@ -58,7 +54,7 @@ def refresh_dashboard(logic):
     create_container_card(cards_frame, 0, "Current Balance", f"₱{logic.current_balance():,.2f}", "black")
     create_container_card(cards_frame, 1, "Total Income", f"₱{logic.total_income():,.2f}", COLOR_SUCCESS)
     create_container_card(cards_frame, 2, "Total Expenses", f"-₱{logic.total_expenses():,.2f}", COLOR_DANGER)
-    create_container_card(cards_frame, 3, "Total Savings", f"₱{logic.total_saved():,.2f}", COLOR_SIDEBAR_ACTIVE)
+    create_container_card(cards_frame, 3, "Total Savings", f"₱{logic.total_savings():,.2f}", COLOR_SIDEBAR_ACTIVE)
 
     # matplotlib static Charts
     chart_area, bars_pos = plt.subplots(figsize=(8, 4), dpi=100)
@@ -69,7 +65,7 @@ def refresh_dashboard(logic):
     categories = ['Income', 'Expenses', 'Savings']
 
     # amounts list (with logic data)
-    amounts = [logic.total_income(), logic.total_expenses(), logic.total_saved()]
+    amounts = [logic.total_income(), logic.total_expenses(), logic.total_savings()]
 
     # bar colors
     bar_colors = [COLOR_SUCCESS, COLOR_DANGER, COLOR_SIDEBAR_ACTIVE]
@@ -84,15 +80,17 @@ def refresh_dashboard(logic):
     bars_pos.tick_params(colors=COLOR_EDIT) # color of side nums
     bars_pos.set_title('Cash Flow Overview', color=COLOR_SIDEBAR, pad=20, fontsize=14, fontweight='bold')
 
+    # creating the bars
     for bar in bars:
         y_value = bar.get_height()
         if y_value == logic.total_income():
             bars_pos.text(bar.get_x() + bar.get_width()/2, y_value + 100, f'₱{y_value:,.0f}', ha='center', va='bottom', color=COLOR_SIDEBAR, fontweight='bold')
         if y_value == logic.total_expenses():
             bars_pos.text(bar.get_x() + bar.get_width()/2, y_value + 100, f'-₱{y_value:,.0f}', ha='center', va='bottom', color=COLOR_SIDEBAR, fontweight='bold')
-        if y_value == logic.total_saved():
+        if y_value == logic.total_savings():
             bars_pos.text(bar.get_x() + bar.get_width()/2, y_value + 100, f'₱{y_value:,.0f}', ha='center', va='bottom', color=COLOR_SIDEBAR, fontweight='bold')
 
+    # then finally puttin it on the frame
     canvas = FigureCanvasTkAgg(chart_area, master=chart_frame)
     canvas.draw()
     canvas.get_tk_widget().pack(fill="both", expand=True, padx=10, pady=10)

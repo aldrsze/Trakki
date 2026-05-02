@@ -2,25 +2,27 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from colors import *
 
-_view_expenses_content_box = None
+# empty object
+view_expenses_content_box = None
 
+# view expenses
 def view_expenses(root, content_box, logic):
-    global _view_expenses_content_box
-    _view_expenses_content_box = content_box
+    # global variable
+    global view_expenses_content_box
+    view_expenses_content_box = content_box
 
     refresh_expense(logic)
 
+# refresh Expense
 def refresh_expense(logic):
-    global _view_expenses_content_box
-
-    if _view_expenses_content_box is None:
-        return
-    
-    for widget in _view_expenses_content_box.winfo_children():
+    # global variable
+    global view_expenses_content_box
+    # destroys all widget
+    for widget in view_expenses_content_box.winfo_children():
         widget.destroy()
 
     # container
-    split_container = tk.Frame(_view_expenses_content_box, bg=COLOR_CONTENT_BG)
+    split_container = tk.Frame(view_expenses_content_box, bg=COLOR_CONTENT_BG)
     split_container.pack(fill="both", expand=True, padx=10, pady=10)
 
     # divide the container into two (column 0 and 1)
@@ -42,26 +44,31 @@ def refresh_expense(logic):
         "font": ("Calibri", 14)
     }
 
-    # Total Expenses Card
+    # total expenses frame
     total_expenses_card = tk.Frame(left_frame, bg=COLOR_CARD_BG, highlightbackground=COLOR_BORDER, highlightthickness=1, relief="flat")
     total_expenses_card.pack(fill="x", padx=20, pady=2)
     
-    balance_label = tk.Label(total_expenses_card, text="Total Expenses", font=("Calibri", 11), bg=COLOR_CARD_BG, fg=COLOR_MUTED)
-    balance_label.pack(pady=(10, 0))
+    # expense label 
+    expense_label = tk.Label(total_expenses_card, text="Total Expenses", font=("Calibri", 11), bg=COLOR_CARD_BG, fg=COLOR_MUTED)
+    expense_label.pack(pady=(10, 0))
     
+    # expense value
     expense_value = tk.Label(total_expenses_card, text=f"-₱{logic.total_expenses():,.2f}", font=("Calibri", 18, "bold"), bg=COLOR_CARD_BG, fg=COLOR_DANGER)
     expense_value.pack(pady=(0, 10))
 
-    # Total Balance Card
+    # balance card frame
     total_balance_card = tk.Frame(left_frame, bg=COLOR_CARD_BG, highlightbackground=COLOR_BORDER, highlightthickness=1, relief="flat")
     total_balance_card.pack(fill="x", padx=20, pady=2)
     
+    # balance label
     balance_label = tk.Label(total_balance_card, text="Total Balance", font=("Calibri", 11), bg=COLOR_CARD_BG, fg=COLOR_MUTED)
     balance_label.pack(pady=(10, 0))
     
+    # balance value
     balance_value = tk.Label(total_balance_card, text=f"₱{logic.current_balance():,.2f}", font=("Calibri", 18, "bold"), bg=COLOR_CARD_BG, fg=COLOR_SIDEBAR_ACTIVE)
     balance_value.pack(pady=(0, 10))
 
+    # function for updating expense / balance value cards
     def update_expenses_display():
         total_expenses = logic.total_expenses()
         current_balance = logic.current_balance()
@@ -96,6 +103,7 @@ def refresh_expense(logic):
         category_input.delete(0, tk.END)
         description_input.delete('1.0', tk.END)
 
+    # function for resetting form 
     def reset_form():
         clear_fields()
         editing_id[0] = None
@@ -103,9 +111,12 @@ def refresh_expense(logic):
         submit_button.config(text="Add Expense")
         cancel_button.pack_forget()  # Hide the cancel button
 
+    # list for editing id
     editing_id = [None]
 
+    # function for handling submit button
     def handle_submit():
+        # get the input values
         amount = amount_input.get()
         category = category_input.get()
         desc = description_input.get("1.0", "end-1c")
@@ -138,7 +149,8 @@ def refresh_expense(logic):
             # if not, it returns the balance itself
             else:
                 available_balance = total_balance
-
+            
+            # if amount is highes than the balance
             if amount > available_balance:
                 tk.messagebox.showwarning(
                     "Insufficient Balance",
@@ -153,6 +165,7 @@ def refresh_expense(logic):
             # For new expenses
             current_balance = total_balance
 
+            # if amount is higher than current balance
             if amount > current_balance:
                 tk.messagebox.showwarning(
                     "Insufficient Balance",
@@ -202,6 +215,7 @@ def refresh_expense(logic):
     canvas.pack(side="left", fill="both", expand=True)
     canvas.bind("<Configure>", lambda e: canvas.itemconfig(canvas_window, width=e.width))
 
+    # handles card actions buttons
     def handle_card_action(action, expense_id):
         if action == "remove":
             response = tk.messagebox.askyesno("Delete", "Are you sure you want to delete?")
@@ -256,6 +270,7 @@ def refresh_expense(logic):
         date_details = tk.Label(card, text=date, font=("Calibri", 10), fg=COLOR_SUBTEXT, bg=COLOR_CARD_BG)
         date_details.pack(anchor="w", padx=10, pady=(10, 15))
 
+    # function for refreshing cards
     def refresh_cards():
         # Clear all existing income cards
         for existing_card_widget in expense_grid.winfo_children():

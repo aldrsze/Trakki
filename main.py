@@ -58,7 +58,7 @@ def show_page(page_name):
         dashboard_view.refresh_dashboard(app_logic)
     if page_name == "Savings":
         savings_view.refresh_savings(app_logic)
-    if page_name == "Table View":
+    if page_name == "Transactions":
         transaction_view.refresh_table(app_logic)
     if page_name == "Income":
         income_view.refresh_income(app_logic)

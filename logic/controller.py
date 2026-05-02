@@ -168,11 +168,11 @@ class TrakkiLogic:
     def current_balance(self):
         income_total = self.total_income()
         expense_total = self.total_expenses()
-        saved_total = self.total_saved()
+        saved_total = self.total_savings()
         
         return income_total - expense_total - saved_total
 
-    def total_saved(self):
+    def total_savings(self):
         total = 0
         for target in self.get_savings():
             amount = target.get_saved()

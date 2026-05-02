@@ -87,8 +87,12 @@ for item_name, builder_func in nav_items:
     pages[item_name] = page_frame # Store this frame for show_page to access
 
     # title label
-    title_label = tk.Label(page_frame, text=item_name.upper(), font="Calibri 24 bold", bg=COLOR_MAIN_BG, fg="black")
-    title_label.pack(anchor="n", padx=30)
+    if item_name == "AI Chat":
+        title_label = tk.Label(page_frame, text="Financial Assistant", font="Calibri 24 bold", bg=COLOR_MAIN_BG, fg="black")
+        title_label.pack(anchor="n", padx=30)
+    else:
+        title_label = tk.Label(page_frame, text=item_name, font="Calibri 24 bold", bg=COLOR_MAIN_BG, fg="black")
+        title_label.pack(anchor="n", padx=30)
 
     # content_box for the specific page
     content_box = tk.Frame(page_frame, bg=COLOR_CONTENT_BG, highlightbackground=COLOR_BORDER, highlightthickness=0)
